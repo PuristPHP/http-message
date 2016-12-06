@@ -1,0 +1,27 @@
+{
+    "name": "puristphp/http-message",
+    "description": "PSR7 implementation of http messages",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Nicholas Ruunu",
+            "email": "nicholas@ruu.nu"
+        }
+    ],
+    "require": {
+        "guzzlehttp/psr7": "^1.2",
+        "psr/http-message": "^1.0"
+    },
+    "require-dev": {
+        "phpspec/phpspec": "^3.0"
+    },
+    "config": {
+        "bin-dir": "bin"
+    },
+    "autoload": {
+        "psr-4": {
+            "Purist\\": "src/"
+        }
+    }
+}

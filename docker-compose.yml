@@ -1,0 +1,11 @@
+test:
+  build: .
+  volumes:
+    - .:/code
+  command: /bin/run-tests.sh
+
+phpspec:
+  build: .
+  volumes:
+    - .:/code
+  entrypoint: /code/bin/phpspec
