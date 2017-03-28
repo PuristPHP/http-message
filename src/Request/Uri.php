@@ -310,7 +310,7 @@ final class Uri implements UriInterface
     public function withHost($host)
     {
         $uri = clone $this;
-        $uri->host = $host;
+        $uri->host = $host !== null && $host !== '' ? $host : null;
         return $uri;
     }
 
@@ -333,7 +333,7 @@ final class Uri implements UriInterface
      */
     public function withPort($port)
     {
-        if ($port < 1 || $port > 65535) {
+        if ($port !== null && ($port < 1 || $port > 65535)) {
             throw new InvalidArgumentException(
                 sprintf('Invalid port %d must be between 1 and 65535', $port)
             );
