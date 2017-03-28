@@ -2,17 +2,28 @@
 
 namespace spec\Purist\Request;
 
+use GuzzleHttp\Psr7\LazyOpenStream;
+use GuzzleHttp\Psr7\Stream;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\UriInterface;
+use Purist\Message\HttpHeaders;
+use Purist\Message\HttpMessage;
+use Purist\Request\ParsedBody;
+use Purist\Request\Request;
 use Purist\Request\UploadedFile\UploadedFile;
+use Purist\Request\Uri;
 
 class ServerRequestSpec extends ObjectBehavior
 {
-    function it_is_initializable(RequestInterface $request)
+    function let(RequestInterface $request)
     {
         $this->beConstructedWith($request, [], [], []);
+    }
+
+    function it_is_initializable(RequestInterface $request)
+    {
         $this->shouldHaveType('Purist\Request\ServerRequest');
     }
 
@@ -40,7 +51,7 @@ class ServerRequestSpec extends ObjectBehavior
     {
         $uri->getQuery()->willReturn('something&somethingElse=1&another[hello]=true');
         $request->getUri()->willReturn($uri);
-        $this->beConstructedWith($request, [], [], []);
+
         $this->getQueryParams()->shouldReturn([
             'something' => '',
             'somethingElse' => '1',
@@ -61,7 +72,6 @@ class ServerRequestSpec extends ObjectBehavior
         $request->withUri(Argument::any(), false)->willReturn($request);
         $request->getUri()->willReturn($uri);
 
-        $this->beConstructedWith($request, [], [], []);
         $this->withQueryParams($queryParams)
             ->callOnWrappedObject('getQueryParams')
             ->shouldReturn($queryParams);
@@ -104,5 +114,38 @@ class ServerRequestSpec extends ObjectBehavior
         $files['inputName']
             ->callOnWrappedObject('getStream')
             ->shouldImplement('Psr\Http\Message\StreamInterface');
+    }
+
+    function it_returns_parsed_body(RequestInterface $request)
+    {
+        $this->beConstructedWith(
+            $request,
+            [],
+            [],
+            [],
+            new ParsedBody(['name' => 'Nicholas Ruunu', 'status' => 1])
+        );
+
+        $this->getParsedBody()->shouldReturn(['name' => 'Nicholas Ruunu', 'status' => 1]);
+    }
+
+    function it_returns_new_instance_with_parsed_body()
+    {
+        $parsedBody = ['name' => 'Nicholas Ruunu', 'status' => 1];
+
+        $this
+            ->withParsedBody($parsedBody)
+            ->callOnWrappedObject('getParsedBody')
+            ->shouldReturn($parsedBody);
+    }
+
+    function it_constructs_from_globals()
+    {
+        $_SERVER['REQUEST_URI'] = '/path';
+        $_POST['text'] = 'hello';
+
+       $this->beConstructedThrough('fromGlobals');
+       $this->getUri()->callOnWrappedObject('getPath')->shouldReturn('/path');
+       $this->getParsedBody()->shouldReturn(['text' => 'hello']);
     }
 }

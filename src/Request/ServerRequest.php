@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace Purist\Request;
 
-use Psr\Http\Message\An;
+use GuzzleHttp\Psr7\LazyOpenStream;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UriInterface;
+use Purist\Message\HttpHeaders;
+use Purist\Message\HttpMessage;
 use Purist\Request\UploadedFile\ProcessedUploadedFiles;
 
 final class ServerRequest implements ServerRequestInterface
@@ -18,20 +20,65 @@ final class ServerRequest implements ServerRequestInterface
     private $cookieParams;
     private $uploadedFiles;
     private $attributes;
+    private $parsedBody;
 
     public function __construct(
         RequestInterface $request,
         array $serverParams,
         array $cookieParams,
         array $uploadedFiles,
+        ParsedBody $parsedBody = null,
         array $attributes = []
-    )
-    {
+    ) {
         $this->request = $request;
         $this->serverParams = $serverParams;
         $this->cookieParams = $cookieParams;
         $this->uploadedFiles = $uploadedFiles;
+        $this->parsedBody = $parsedBody;
         $this->attributes = $attributes;
+    }
+
+    public static function fromGlobals(): self
+    {
+        return new self(
+            new Request(
+                new HttpMessage(
+                    str_replace('HTTP/', '', $_SERVER['SERVER_PROTOCOL'] ?? '1.1'),
+                    new HttpHeaders(
+                        function_exists('getallheaders') ? getallheaders() : []
+                    ),
+                    new LazyOpenStream('php://input', 'r+')
+                ),
+                self::createUriFromGlobals(),
+                $_SERVER['REQUEST_METHOD'] ?? 'GET'
+            ),
+            $_SERVER,
+            $_COOKIE,
+            $_FILES,
+            !empty($_POST) ? new ParsedBody($_POST) : null
+        );
+    }
+
+    private static function createUriFromGlobals()
+    {
+        @list($host, $port) = explode(
+            ':',
+            $_SERVER['HTTP_HOST'] ?? $_SERVER['SERVER_NAME'] ?? $_SERVER['SERVER_ADDR'] ?? ''
+        );
+        @list($path, $query) = explode('?', $_SERVER['REQUEST_URI'] ?? '');
+        @list($query, $fragment) = explode('#', $query ?? '');
+
+        return (new Uri)
+            ->withScheme(
+                !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off'
+                    ? 'https'
+                    : 'http'
+            )
+            ->withHost($host)
+            ->withPort($port ?? $_SERVER['SERVER_PORT'] ?? 80)
+            ->withPath($path !== '' ? $path : null)
+            ->withQuery($query !== '' ? $query : $_SERVER['QUERY_STRING'] ?? null)
+            ->withFragment($fragment);
     }
 
     /**
@@ -66,6 +113,7 @@ final class ServerRequest implements ServerRequestInterface
             $this->serverParams,
             $this->cookieParams,
             $this->uploadedFiles,
+            $this->parsedBody,
             $this->attributes
         );
     }
@@ -129,7 +177,7 @@ final class ServerRequest implements ServerRequestInterface
      */
     public function getHeader($name)
     {
-        return $this->getHeader($name);
+        return $this->request->getHeader($name);
     }
 
     /**
@@ -178,6 +226,7 @@ final class ServerRequest implements ServerRequestInterface
             $this->serverParams,
             $this->cookieParams,
             $this->uploadedFiles,
+            $this->parsedBody,
             $this->attributes
         );
     }
@@ -205,6 +254,7 @@ final class ServerRequest implements ServerRequestInterface
             $this->serverParams,
             $this->cookieParams,
             $this->uploadedFiles,
+            $this->parsedBody,
             $this->attributes
         );
     }
@@ -228,6 +278,7 @@ final class ServerRequest implements ServerRequestInterface
             $this->serverParams,
             $this->cookieParams,
             $this->uploadedFiles,
+            $this->parsedBody,
             $this->attributes
         );
     }
@@ -262,6 +313,7 @@ final class ServerRequest implements ServerRequestInterface
             $this->serverParams,
             $this->cookieParams,
             $this->uploadedFiles,
+            $this->parsedBody,
             $this->attributes
         );
     }
@@ -311,6 +363,7 @@ final class ServerRequest implements ServerRequestInterface
             $this->serverParams,
             $this->cookieParams,
             $this->uploadedFiles,
+            $this->parsedBody,
             $this->attributes
         );
     }
@@ -347,6 +400,7 @@ final class ServerRequest implements ServerRequestInterface
             $this->serverParams,
             $this->cookieParams,
             $this->uploadedFiles,
+            $this->parsedBody,
             $this->attributes
         );
     }
@@ -402,6 +456,7 @@ final class ServerRequest implements ServerRequestInterface
             $this->serverParams,
             $this->cookieParams,
             $this->uploadedFiles,
+            $this->parsedBody,
             $this->attributes
         );
     }
@@ -459,6 +514,7 @@ final class ServerRequest implements ServerRequestInterface
             $this->serverParams,
             $cookies,
             $this->uploadedFiles,
+            $this->parsedBody,
             $this->attributes
         );
     }
@@ -547,6 +603,7 @@ final class ServerRequest implements ServerRequestInterface
             $this->serverParams,
             $this->cookieParams,
             $uploadedFiles,
+            $this->parsedBody,
             $this->attributes
         );
     }
@@ -568,7 +625,7 @@ final class ServerRequest implements ServerRequestInterface
      */
     public function getParsedBody()
     {
-        return $this->request->getBody();
+        return $this->parsedBody !== null ? $this->parsedBody->get() : null;
     }
 
     /**
@@ -602,10 +659,11 @@ final class ServerRequest implements ServerRequestInterface
     public function withParsedBody($data)
     {
         return new self(
-            $this->request->withBody(),
+            $this->request,
             $this->serverParams,
             $this->cookieParams,
             $this->uploadedFiles,
+            $data !== null ? new ParsedBody($data) : null,
             $this->attributes
         );
     }
@@ -672,6 +730,7 @@ final class ServerRequest implements ServerRequestInterface
             $this->serverParams,
             $this->cookieParams,
             $this->uploadedFiles,
+            $this->parsedBody,
             array_merge($this->attributes, [$name => $value])
         );
     }
@@ -697,6 +756,7 @@ final class ServerRequest implements ServerRequestInterface
             $this->serverParams,
             $this->cookieParams,
             $this->uploadedFiles,
+            $this->parsedBody,
             array_filter(
                 $this->attributes,
                 function ($key) use ($name) {
