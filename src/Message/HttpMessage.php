@@ -21,7 +21,7 @@ final class HttpMessage implements MessageInterface
     private $body;
 
     public function __construct(
-        $protocolVersion,
+        string $protocolVersion,
         Headers $headers,
         StreamInterface $body
     )

@@ -2,13 +2,9 @@
 
 namespace Purist\Response;
 
-use GuzzleHttp\Psr7\LazyOpenStream;
-use GuzzleHttp\Psr7\Stream;
 use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
-use Purist\Message\HttpHeaders;
-use Purist\Message\HttpMessage;
 
 final class Response implements ResponseInterface
 {
