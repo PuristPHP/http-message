@@ -1,5 +1,5 @@
 {
-    "name": "puristphp/http-message",
+    "name": "purist/http-message",
     "description": "PSR7 implementation of http messages",
     "type": "library",
     "license": "MIT",
@@ -10,6 +10,7 @@
         }
     ],
     "require": {
+        "php": "^7.0",
         "guzzlehttp/psr7": "^1.2",
         "psr/http-message": "^1.0"
     },
