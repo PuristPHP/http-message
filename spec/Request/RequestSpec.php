@@ -4,6 +4,7 @@ namespace spec\Purist\Request;
 
 use PhpSpec\ObjectBehavior;
 use Psr\Http\Message\MessageInterface;
+use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UriInterface;
 use Purist\Request\Request;
@@ -12,13 +13,13 @@ class RequestSpec extends ObjectBehavior
 {
     function let(MessageInterface $httpMessage, UriInterface $uri)
     {
-        $this->beConstructedWith($httpMessage, $uri, 'GET', 'origin-form');
+        $this->beConstructedWith($uri, $httpMessage);
     }
 
     function it_is_initializable()
     {
-        $this->shouldHaveType('Purist\Request\Request');
-        $this->shouldImplement('Psr\Http\Message\RequestInterface');
+        $this->shouldHaveType(Request::class);
+        $this->shouldImplement(RequestInterface::class);
     }
 
     function it_gets_headers(MessageInterface $httpMessage)
@@ -155,13 +156,13 @@ class RequestSpec extends ObjectBehavior
 
     function it_gets_default_request_method($httpMessage, $uri)
     {
-        $this->beConstructedWith($httpMessage, $uri);
+        $this->beConstructedWith($uri, $httpMessage);
         $this->getMethod()->shouldReturn('GET');
     }
 
     function it_gets_custom_request_method($httpMessage, $uri)
     {
-        $this->beConstructedWith($httpMessage, $uri, 'POST');
+        $this->beConstructedWith($uri, $httpMessage, 'POST');
         $this->getMethod()->shouldReturn('POST');
     }
 

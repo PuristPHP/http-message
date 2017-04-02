@@ -9,8 +9,9 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UriInterface;
-use Purist\Message\HttpHeaders;
-use Purist\Message\HttpMessage;
+use Purist\Header\HttpHeaders;
+use Purist\Header\Header;
+use Purist\Message;
 use Purist\Request\UploadedFile\ProcessedUploadedFiles;
 
 final class ServerRequest implements ServerRequestInterface
@@ -42,14 +43,14 @@ final class ServerRequest implements ServerRequestInterface
     {
         return new self(
             new Request(
-                new HttpMessage(
-                    str_replace('HTTP/', '', $_SERVER['SERVER_PROTOCOL'] ?? '1.1'),
+                self::createUriFromGlobals(),
+                new Message(
+                    new LazyOpenStream('php://input', 'r+'),
                     new HttpHeaders(
                         function_exists('getallheaders') ? getallheaders() : []
                     ),
-                    new LazyOpenStream('php://input', 'r+')
+                    str_replace('HTTP/', '', $_SERVER['SERVER_PROTOCOL'] ?? '1.1')
                 ),
-                self::createUriFromGlobals(),
                 $_SERVER['REQUEST_METHOD'] ?? 'GET'
             ),
             $_SERVER,

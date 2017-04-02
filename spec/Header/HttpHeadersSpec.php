@@ -1,9 +1,11 @@
 <?php
 
-namespace spec\Purist\Message;
+namespace spec\Purist\Header;
 
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
+use Purist\Header\Headers;
+use Purist\Header\HttpHeaders;
 
 class HttpHeadersSpec extends ObjectBehavior
 {
@@ -19,8 +21,8 @@ class HttpHeadersSpec extends ObjectBehavior
 
     function it_is_initializable()
     {
-        $this->shouldHaveType('Purist\Message\HttpHeaders');
-        $this->shouldImplement('Purist\Message\Headers');
+        $this->shouldHaveType(HttpHeaders::class);
+        $this->shouldImplement(Headers::class);
     }
 
     function it_checks_if_header_exists_case_insensitively()
