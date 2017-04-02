@@ -1,6 +1,6 @@
 <?php
 
-namespace spec\Purist\Message;
+namespace spec\Purist\Header;
 
 use InvalidArgumentException;
 use PhpSpec\ObjectBehavior;

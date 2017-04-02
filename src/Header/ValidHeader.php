@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Purist\Message;
+namespace Purist\Header;
 
 use InvalidArgumentException;
 

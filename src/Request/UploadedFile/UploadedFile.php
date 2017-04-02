@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Purist\Request\UploadedFile;
 
 use GuzzleHttp\Psr7\LazyOpenStream;
@@ -8,7 +10,7 @@ use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UploadedFileInterface;
 use RuntimeException;
 
-class UploadedFile implements UploadedFileInterface
+final class UploadedFile implements UploadedFileInterface
 {
     private $name;
     private $type;

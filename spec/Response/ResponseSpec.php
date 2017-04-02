@@ -4,17 +4,14 @@ namespace spec\Purist\Response;
 
 use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\StreamInterface;
 use Purist\Response\Response;
 use PhpSpec\ObjectBehavior;
-use Prophecy\Argument;
-use spec\Purist\Message\HttpMessageSpec;
 
 class ResponseSpec extends ObjectBehavior
 {
     function let(MessageInterface $message)
     {
-        $this->beConstructedWith(200, 'Reasonphrase', $message);
+        $this->beConstructedWith($message, 201, 'reason phrase');
     }
 
     function it_is_initializable()
@@ -25,7 +22,12 @@ class ResponseSpec extends ObjectBehavior
 
     function it_returns_the_http_status_code()
     {
-        $this->getStatusCode()->shouldReturn(200);
+        $this->getStatusCode()->shouldReturn(201);
+    }
+
+    function it_returns_reason_phrase()
+    {
+        $this->getReasonPhrase()->shouldReturn('reason phrase');
     }
 
     function it_returns_new_instance_with_changed_status()
