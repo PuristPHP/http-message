@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace Purist\Request;
 
+use GuzzleHttp\Psr7\Stream;
 use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UriInterface;
+use Purist\Message;
 
-class Request implements RequestInterface
+final class Request implements RequestInterface
 {
     private $message;
     private $uri;
@@ -17,13 +19,13 @@ class Request implements RequestInterface
     private $requestTarget;
 
     public function __construct(
-        MessageInterface $message,
         UriInterface $uri,
+        MessageInterface $message = null,
         string $method = 'GET',
         string $requestTarget = RequestTarget::ORIGIN_FORM
     ) {
-        $this->message = $message;
         $this->uri = $uri;
+        $this->message = $message ?? new Message(new Stream(fopen('php://temp')));
         $this->method = $method;
         $this->requestTarget = new RequestTarget($requestTarget, $uri);
     }
@@ -56,8 +58,8 @@ class Request implements RequestInterface
     public function withProtocolVersion($version)
     {
         return new self(
-            $this->message->withProtocolVersion($version),
             $this->uri,
+            $this->message->withProtocolVersion($version),
             $this->method,
             $this->requestTarget->form()
         );
@@ -167,8 +169,8 @@ class Request implements RequestInterface
     public function withHeader($name, $value)
     {
         return new self(
-            $this->message->withHeader($name, $value),
             $this->uri,
+            $this->message->withHeader($name, $value),
             $this->method,
             $this->requestTarget->form()
         );
@@ -193,8 +195,8 @@ class Request implements RequestInterface
     public function withAddedHeader($name, $value)
     {
         return new self(
-            $this->message->withAddedHeader($name, $value),
             $this->uri,
+            $this->message->withAddedHeader($name, $value),
             $this->method,
             $this->requestTarget->form()
         );
@@ -215,8 +217,8 @@ class Request implements RequestInterface
     public function withoutHeader($name)
     {
         return new self(
-            $this->message->withoutHeader($name),
             $this->uri,
+            $this->message->withoutHeader($name),
             $this->method,
             $this->requestTarget->form()
         );
@@ -248,8 +250,8 @@ class Request implements RequestInterface
     public function withBody(StreamInterface $body)
     {
         return new self(
-            $this->message->withBody($body),
             $this->uri,
+            $this->message->withBody($body),
             $this->method,
             $this->requestTarget->form()
         );
@@ -296,8 +298,8 @@ class Request implements RequestInterface
     public function withRequestTarget($requestTarget)
     {
         return new self(
-            $this->message,
             $this->uri,
+            $this->message,
             $this->method,
             $requestTarget
         );
@@ -331,8 +333,8 @@ class Request implements RequestInterface
     public function withMethod($method)
     {
         return new self(
-            $this->message,
             $this->uri,
+            $this->message,
             $method,
             $this->requestTarget->form()
         );
@@ -385,8 +387,8 @@ class Request implements RequestInterface
     public function withUri(UriInterface $uri, $preserveHost = false)
     {
         return new self(
-            $this->message,
             $preserveHost === true ? $uri->withHost($this->uri->getHost()) : $uri,
+            $this->message,
             $this->method,
             $this->requestTarget->form()
         );

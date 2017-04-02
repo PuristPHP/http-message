@@ -1,16 +1,16 @@
 <?php
 
-namespace spec\Purist\Message;
+namespace spec\Purist;
 
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
+use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\StreamInterface;
-use Purist\Message\HttpHeaders;
+use Purist\Header\HttpHeaders;
+use Purist\Message;
 
-class HttpMessageSpec extends ObjectBehavior
+class MessageSpec extends ObjectBehavior
 {
-    const STANDARD_PROTOCOL_VERSION = '1.1';
-
     private $headers = [
         'Content-Type' => 'text/html',
         'Accept' => ['text/html', 'application/javascript'],
@@ -19,29 +19,29 @@ class HttpMessageSpec extends ObjectBehavior
     function let(StreamInterface $body)
     {
         $this->beConstructedWith(
-            self::STANDARD_PROTOCOL_VERSION,
+            $body,
             new HttpHeaders($this->headers),
-            $body
+            '1.0'
         );
     }
 
     function it_is_initializable()
     {
-        $this->shouldHaveType('Purist\Message\HttpMessage');
-        $this->shouldImplement('Psr\Http\Message\MessageInterface');
+        $this->shouldHaveType(Message::class);
+        $this->shouldImplement(MessageInterface::class);
     }
 
     function it_gets_protocol_version()
     {
-        $this->getProtocolVersion()->shouldReturn(self::STANDARD_PROTOCOL_VERSION);
+        $this->getProtocolVersion()->shouldReturn('1.0');
     }
 
     function it_gets_a_new_instance_with_changed_protocol_version()
     {
         $this
-            ->withProtocolVersion('1.0')
+            ->withProtocolVersion('1.1')
             ->callOnWrappedObject('getProtocolVersion')
-            ->shouldReturn('1.0');
+            ->shouldReturn('1.1');
     }
 
     function it_checks_if_header_exists_case_insensitively($headers)

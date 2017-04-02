@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Purist\Response;
 
 use Psr\Http\Message\MessageInterface;
@@ -8,27 +10,18 @@ use Psr\Http\Message\StreamInterface;
 
 final class Response implements ResponseInterface
 {
-    /**
-     * @var int
-     */
     private $statusCode;
-    /**
-     * @var string
-     */
     private $reasonPhrase;
-    /**
-     * @var MessageInterface
-     */
     private $message;
 
     public function __construct(
-        int $statusCode,
-        string $reasonPhrase = '',
-        MessageInterface $message
+        MessageInterface $message,
+        int $statusCode = 200,
+        string $reasonPhrase = ''
     ) {
-        $this->statusCode = $statusCode;
-        $this->reasonPhrase = $reasonPhrase;
         $this->message = $message;
+        $this->reasonPhrase = $reasonPhrase;
+        $this->statusCode = $statusCode;
     }
 
     /**
@@ -59,9 +52,9 @@ final class Response implements ResponseInterface
     public function withProtocolVersion($version)
     {
         return new self(
+            $this->message->withProtocolVersion($version),
             $this->statusCode,
-            $this->reasonPhrase,
-            $this->message->withProtocolVersion($version)
+            $this->reasonPhrase
         );
     }
 
@@ -169,9 +162,9 @@ final class Response implements ResponseInterface
     public function withHeader($name, $value)
     {
         return new self(
+            $this->message->withHeader($name, $value),
             $this->statusCode,
-            $this->reasonPhrase,
-            $this->message->withHeader($name, $value)
+            $this->reasonPhrase
         );
     }
 
@@ -194,9 +187,9 @@ final class Response implements ResponseInterface
     public function withAddedHeader($name, $value)
     {
         return new self(
+            $this->message->withAddedHeader($name, $value),
             $this->statusCode,
-            $this->reasonPhrase,
-            $this->message->withAddedHeader($name, $value)
+            $this->reasonPhrase
         );
     }
 
@@ -215,9 +208,9 @@ final class Response implements ResponseInterface
     public function withoutHeader($name)
     {
         return new self(
+            $this->message->withoutHeader($name),
             $this->statusCode,
-            $this->reasonPhrase,
-            $this->message->withoutHeader($name)
+            $this->reasonPhrase
         );
     }
 
@@ -285,9 +278,9 @@ final class Response implements ResponseInterface
     public function withStatus($code, $reasonPhrase = '')
     {
         return new self(
+            $this->message,
             $code,
-            $reasonPhrase,
-            $this->message
+            $reasonPhrase
         );
     }
 

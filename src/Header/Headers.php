@@ -1,66 +1,11 @@
 <?php
 
-namespace Purist\Message;
+declare(strict_types=1);
 
-use Psr\Http\Message\MessageInterface;
-use Psr\Http\Message\StreamInterface;
+namespace Purist\Header;
 
-final class HttpMessage implements MessageInterface
+interface Headers
 {
-    /**
-     * @type string
-     */
-    private $protocolVersion;
-    /**
-     * @type array
-     */
-    private $headers;
-    /**
-     * @type StreamInterface
-     */
-    private $body;
-
-    public function __construct(
-        string $protocolVersion,
-        Headers $headers,
-        StreamInterface $body
-    )
-    {
-        $this->protocolVersion = $protocolVersion;
-        $this->headers = $headers;
-        $this->body = $body;
-    }
-
-    /**
-     * Retrieves the HTTP protocol version as a string.
-     *
-     * The string MUST contain only the HTTP version number (e.g., "1.1", "1.0").
-     *
-     * @return string HTTP protocol version.
-     */
-    public function getProtocolVersion()
-    {
-        return $this->protocolVersion;
-    }
-
-    /**
-     * Return an instance with the specified HTTP protocol version.
-     *
-     * The version string MUST contain only the HTTP version number (e.g.,
-     * "1.1", "1.0").
-     *
-     * This method MUST be implemented in such a way as to retain the
-     * immutability of the message, and MUST return an instance that has the
-     * new protocol version.
-     *
-     * @param string $version HTTP protocol version
-     * @return self
-     */
-    public function withProtocolVersion($version)
-    {
-        return new self($version, $this->headers, $this->body);
-    }
-
     /**
      * Retrieves all message header values.
      *
@@ -86,10 +31,7 @@ final class HttpMessage implements MessageInterface
      *     key MUST be a header name, and each value MUST be an array of strings
      *     for that header.
      */
-    public function getHeaders()
-    {
-        return $this->headers->toArray();
-    }
+    public function toArray(): array;
 
     /**
      * Checks if a header exists by the given case-insensitive name.
@@ -99,10 +41,7 @@ final class HttpMessage implements MessageInterface
      *     name using a case-insensitive string comparison. Returns false if
      *     no matching header name is found in the message.
      */
-    public function hasHeader($name)
-    {
-        return $this->headers->has($name);
-    }
+    public function has($name): bool;
 
     /**
      * Retrieves a message header value by the given case-insensitive name.
@@ -118,10 +57,7 @@ final class HttpMessage implements MessageInterface
      *    header. If the header does not appear in the message, this method MUST
      *    return an empty array.
      */
-    public function getHeader($name)
-    {
-        return $this->headers->header($name);
-    }
+    public function header($name): array;
 
     /**
      * Retrieves a comma-separated string of the values for a single header.
@@ -142,10 +78,7 @@ final class HttpMessage implements MessageInterface
      *    concatenated together using a comma. If the header does not appear in
      *    the message, this method MUST return an empty string.
      */
-    public function getHeaderLine($name)
-    {
-        return $this->headers->headerLine($name);
-    }
+    public function headerLine($name): string;
 
     /**
      * Return an instance with the provided value replacing the specified header.
@@ -162,14 +95,7 @@ final class HttpMessage implements MessageInterface
      * @return self
      * @throws \InvalidArgumentException for invalid header names or values.
      */
-    public function withHeader($name, $value)
-    {
-        return new self(
-            $this->protocolVersion,
-            $this->headers->replace($name, $value),
-            $this->body
-        );
-    }
+    public function replace($name, $value): Headers;
 
     /**
      * Return an instance with the specified header appended with the given value.
@@ -187,14 +113,7 @@ final class HttpMessage implements MessageInterface
      * @return self
      * @throws \InvalidArgumentException for invalid header names or values.
      */
-    public function withAddedHeader($name, $value)
-    {
-        return new self(
-            $this->protocolVersion,
-            $this->headers->add($name, $value),
-            $this->body
-        );
-    }
+    public function add($name, $value): Headers;
 
     /**
      * Return an instance without the specified header.
@@ -208,40 +127,5 @@ final class HttpMessage implements MessageInterface
      * @param string $name Case-insensitive header field name to remove.
      * @return self
      */
-    public function withoutHeader($name)
-    {
-        return new self(
-            $this->protocolVersion,
-            $this->headers->remove($name),
-            $this->body
-        );
-    }
-
-    /**
-     * Gets the body of the message.
-     *
-     * @return StreamInterface Returns the body as a stream.
-     */
-    public function getBody()
-    {
-        return $this->body;
-    }
-
-    /**
-     * Return an instance with the specified message body.
-     *
-     * The body MUST be a StreamInterface object.
-     *
-     * This method MUST be implemented in such a way as to retain the
-     * immutability of the message, and MUST return a new instance that has the
-     * new body stream.
-     *
-     * @param StreamInterface $body Body.
-     * @return self
-     * @throws \InvalidArgumentException When the body is not valid.
-     */
-    public function withBody(StreamInterface $body)
-    {
-        return new self($this->protocolVersion, $this->headers, $body);
-    }
+    public function remove($name): Headers;
 }

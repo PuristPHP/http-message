@@ -1,15 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Purist\Request;
 
 use Psr\Http\Message\RequestInterface;
 
-class RequestUri
+final class RequestUri
 {
-
-    /**
-     * @type RequestInterface
-     */
     private $request;
 
     public function __construct(RequestInterface $request)

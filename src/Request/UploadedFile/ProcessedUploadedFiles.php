@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Purist\Request\UploadedFile;
 
-class ProcessedUploadedFiles implements UploadedFiles
+final class ProcessedUploadedFiles implements UploadedFiles
 {
     private $uploadedFilesParams;
 
