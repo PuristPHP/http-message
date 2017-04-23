@@ -1,10 +1,10 @@
 <?php
 
-namespace spec\Purist\Http\Request;
+namespace spec\Purist\Request;
 
 use InvalidArgumentException;
 use Psr\Http\Message\UriInterface;
-use Purist\Http\Request\Uri;
+use Purist\Request\Uri;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 

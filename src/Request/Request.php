@@ -2,14 +2,18 @@
 
 declare(strict_types=1);
 
-namespace Purist\Http\Request;
+namespace Purist\Request;
 
-use GuzzleHttp\Psr7\Stream;
 use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UriInterface;
+<<<<<<< Updated upstream
+use Purist\Message;
+=======
 use Purist\Http\Message;
+use Purist\Http\Stream\LazyReadOnlyTextStream;
+>>>>>>> Stashed changes
 
 final class Request implements RequestInterface
 {
@@ -25,7 +29,7 @@ final class Request implements RequestInterface
         string $requestTarget = RequestTarget::ORIGIN_FORM
     ) {
         $this->uri = $uri;
-        $this->message = $message ?? new Message(new Stream(fopen('php://temp')));
+        $this->message = $message ?? new Message(new LazyReadOnlyTextStream());
         $this->method = $method;
         $this->requestTarget = new RequestTarget($requestTarget, $uri);
     }

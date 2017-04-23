@@ -2,17 +2,24 @@
 
 declare(strict_types=1);
 
-namespace Purist\Http\Request;
+namespace Purist\Request;
 
-use GuzzleHttp\Psr7\LazyOpenStream;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UriInterface;
+<<<<<<< Updated upstream
+use Purist\Header\HttpHeaders;
+use Purist\Header\Header;
+use Purist\Message;
+use Purist\Request\UploadedFile\ProcessedUploadedFiles;
+=======
 use Purist\Http\Header\HttpHeaders;
 use Purist\Http\Header\Header;
 use Purist\Http\Message;
 use Purist\Http\Request\UploadedFile\ProcessedUploadedFiles;
+use Purist\Http\Stream\LazyStream;
+>>>>>>> Stashed changes
 
 final class ServerRequest implements ServerRequestInterface
 {
@@ -45,7 +52,7 @@ final class ServerRequest implements ServerRequestInterface
             new Request(
                 self::createUriFromGlobals(),
                 new Message(
-                    new LazyOpenStream('php://input', 'r+'),
+                    new LazyStream('php://input', 'r'),
                     new HttpHeaders(
                         function_exists('getallheaders') ? getallheaders() : []
                     ),

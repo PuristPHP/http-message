@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Purist\Http\Header;
+namespace Purist\Header;
 
 use InvalidArgumentException;
 

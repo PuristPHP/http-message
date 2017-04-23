@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Purist\Http\Request;
+namespace Purist\Request;
 
 use InvalidArgumentException;
 use stdClass;
