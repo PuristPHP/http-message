@@ -33,8 +33,7 @@ final class Uri implements UriInterface
 
     public function __construct(string $uri = '')
     {
-        if (false === $parsedUri = parse_url($uri))
-        {
+        if (false === $parsedUri = parse_url($uri)) {
             throw new Exception(
                 sprintf('Could not parse string "%s"', $uri)
             );
@@ -48,6 +47,42 @@ final class Uri implements UriInterface
         $this->path = !empty($parsedUri['path']) ? rawurldecode($parsedUri['path']) : null;
         $this->query = $parsedUri['query'] ?? null;
         $this->fragment = $parsedUri['fragment'] ?? null;
+    }
+
+    /**
+     * Return the string representation as a URI reference.
+     *
+     * Depending on which components of the URI are present, the resulting
+     * string is either a full URI or relative reference according to RFC 3986,
+     * Section 4.1. The method concatenates the various components of the URI,
+     * using the appropriate delimiters:
+     *
+     * - If a scheme is present, it MUST be suffixed by ":".
+     * - If an authority is present, it MUST be prefixed by "//".
+     * - The path can be concatenated without delimiters. But there are two
+     *   cases where the path has to be adjusted to make the URI reference
+     *   valid as PHP does not allow to throw an exception in __toString():
+     *     - If the path is rootless and an authority is present, the path MUST
+     *       be prefixed by "/".
+     *     - If the path is starting with more than one "/" and no authority is
+     *       present, the starting slashes MUST be reduced to one.
+     * - If a query is present, it MUST be prefixed by "?".
+     * - If a fragment is present, it MUST be prefixed by "#".
+     *
+     * @see http://tools.ietf.org/html/rfc3986#section-4.1
+     * @return string
+     */
+    public function __toString()
+    {
+        return implode(
+            [
+                $this->getScheme() !== '' ? $this->getScheme() . ':' : null,
+                $this->getAuthority() !== '' ? '//' . $this->getAuthority() : null,
+                '/' . ltrim($this->getPath(), '/'),
+                $this->getQuery() !== '' ? '?' . $this->getQuery() : null,
+                $this->getFragment() !== '' ? '#' . $this->getFragment() : null,
+            ]
+        );
     }
 
     /**
@@ -66,7 +101,7 @@ final class Uri implements UriInterface
      */
     public function getScheme()
     {
-        return strtolower($this->scheme);
+        return mb_strtolower($this->scheme);
     }
 
     /**
@@ -102,7 +137,7 @@ final class Uri implements UriInterface
                             ]
                         )
                     ),
-                    $this->getPort()
+                    $this->getPort(),
                 ]
             )
         );
@@ -141,7 +176,7 @@ final class Uri implements UriInterface
      */
     public function getHost()
     {
-        return strtolower($this->host);
+        return mb_strtolower($this->host);
     }
 
     /**
@@ -202,7 +237,7 @@ final class Uri implements UriInterface
      */
     public function getPath()
     {
-        return $this->rawUrlEncode($this->path);
+        return $this->rawUrlEncode($this->path ?? '');
     }
 
     /**
@@ -227,7 +262,7 @@ final class Uri implements UriInterface
      */
     public function getQuery()
     {
-        return $this->rawUrlEncode($this->query);
+        return $this->rawUrlEncode($this->query ?? '');
     }
 
     /**
@@ -418,42 +453,6 @@ final class Uri implements UriInterface
             ? ltrim($fragment, '#')
             : null;
         return $uri;
-    }
-
-    /**
-     * Return the string representation as a URI reference.
-     *
-     * Depending on which components of the URI are present, the resulting
-     * string is either a full URI or relative reference according to RFC 3986,
-     * Section 4.1. The method concatenates the various components of the URI,
-     * using the appropriate delimiters:
-     *
-     * - If a scheme is present, it MUST be suffixed by ":".
-     * - If an authority is present, it MUST be prefixed by "//".
-     * - The path can be concatenated without delimiters. But there are two
-     *   cases where the path has to be adjusted to make the URI reference
-     *   valid as PHP does not allow to throw an exception in __toString():
-     *     - If the path is rootless and an authority is present, the path MUST
-     *       be prefixed by "/".
-     *     - If the path is starting with more than one "/" and no authority is
-     *       present, the starting slashes MUST be reduced to one.
-     * - If a query is present, it MUST be prefixed by "?".
-     * - If a fragment is present, it MUST be prefixed by "#".
-     *
-     * @see http://tools.ietf.org/html/rfc3986#section-4.1
-     * @return string
-     */
-    public function __toString()
-    {
-        return implode(
-            [
-                $this->getScheme() !== '' ? $this->getScheme() . ':' : null,
-                $this->getAuthority() !== '' ? '//' . $this->getAuthority() : null,
-                '/' . ltrim($this->getPath(), '/'),
-                $this->getQuery() !== '' ? '?' . $this->getQuery() : null,
-                $this->getFragment() !== '' ? '#' . $this->getFragment() : null,
-            ]
-        );
     }
 
     private function rawUrlEncode(string $value): string

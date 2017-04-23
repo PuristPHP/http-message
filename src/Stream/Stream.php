@@ -52,7 +52,6 @@ final class Stream implements StreamInterface
     /**
      * Closes the stream and any underlying resources.
      *
-     * @return void
      */
     public function close()
     {
@@ -292,7 +291,7 @@ final class Stream implements StreamInterface
     /**
      * @throws RuntimeException if resource is detached from stream
      */
-    private function assertResource(): void
+    private function assertResource()
     {
         if (!is_resource($this->resource)) {
             throw new RuntimeException('Resource is detached from stream.');

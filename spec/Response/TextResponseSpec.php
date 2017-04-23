@@ -13,8 +13,8 @@ class TextResponseSpec extends ObjectBehavior
     function let()
     {
         $this->beConstructedWith(
-            403,
             'text',
+            403,
             new HttpHeaders(['X-Header' => 'value'])
         );
     }

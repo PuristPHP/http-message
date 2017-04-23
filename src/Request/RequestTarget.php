@@ -17,8 +17,8 @@ final class RequestTarget
     private $uri;
 
     public function __construct(
-        string $requestTargetForm = self::ORIGIN_FORM,
-        UriInterface $uri
+        UriInterface $uri,
+        string $requestTargetForm = self::ORIGIN_FORM
     ) {
         $this->requestTargetForm = $requestTargetForm;
         $this->uri = $uri;
@@ -37,6 +37,11 @@ final class RequestTarget
                 return $this->uri->getAuthority();
         }
 
+        return $this->requestTargetForm;
+    }
+
+    public function form(): string
+    {
         return $this->requestTargetForm;
     }
 
@@ -67,10 +72,5 @@ final class RequestTarget
                 ]
             )
         );
-    }
-
-    public function form(): string
-    {
-        return $this->requestTargetForm;
     }
 }

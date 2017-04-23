@@ -10,7 +10,7 @@ final class LazyStream implements StreamInterface
 
     public function __construct($fileName, $mode)
     {
-        $this->memoizedStream = new MemoizedStream(function() use ($fileName, $mode) {
+        $this->memoizedStream = new MemoizedStream(function () use ($fileName, $mode) {
             return new Stream(fopen($fileName, $mode));
         });
     }

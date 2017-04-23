@@ -94,7 +94,7 @@ final class UploadedFile implements UploadedFileInterface
             );
         }
 
-        if (move_uploaded_file($this->tmpName, $targetPath) === FALSE) {
+        if (move_uploaded_file($this->tmpName, $targetPath) === false) {
             throw new InvalidArgumentException(
                 sprintf('Could not move %s to %s', $this->tmpName, $targetPath)
             );

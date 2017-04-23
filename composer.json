@@ -11,12 +11,14 @@
     ],
     "require": {
         "php": "^7.0",
+        "ext-mbstring": "*",
         "psr/http-message": "^1.0"
     },
     "require-dev": {
         "phpspec/phpspec": "^3.0",
         "memio/spec-gen": "^0.7",
-        "php-mock/php-mock-prophecy": "^0.0.2"
+        "php-mock/php-mock-prophecy": "^0.0.2",
+        "friendsofphp/php-cs-fixer": "^2.3"
     },
     "config": {
         "bin-dir": "bin"

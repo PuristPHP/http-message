@@ -27,7 +27,7 @@ final class Request implements RequestInterface
         $this->uri = $uri;
         $this->message = $message ?? new Message(new LazyReadOnlyTextStream());
         $this->method = $method;
-        $this->requestTarget = new RequestTarget($requestTarget, $uri);
+        $this->requestTarget = new RequestTarget($uri, $requestTarget);
     }
 
     /**
@@ -92,7 +92,7 @@ final class Request implements RequestInterface
      */
     public function getHeaders()
     {
-       return $this->message->getHeaders();
+        return $this->message->getHeaders();
     }
 
     /**
