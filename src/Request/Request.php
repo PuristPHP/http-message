@@ -2,18 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Purist\Request;
+namespace Purist\Http\Request;
 
 use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UriInterface;
-<<<<<<< Updated upstream
-use Purist\Message;
-=======
 use Purist\Http\Message;
 use Purist\Http\Stream\LazyReadOnlyTextStream;
->>>>>>> Stashed changes
 
 final class Request implements RequestInterface
 {

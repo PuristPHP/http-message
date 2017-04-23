@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Purist\Request;
+namespace Purist\Http\Request;
 
 use Psr\Http\Message\RequestInterface;
 

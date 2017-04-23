@@ -1,6 +1,6 @@
 <?php
 
-namespace spec\Purist\Request;
+namespace spec\Purist\Http\Request;
 
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;

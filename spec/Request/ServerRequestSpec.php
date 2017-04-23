@@ -1,26 +1,16 @@
 <?php
 
-namespace spec\Purist\Request;
+namespace spec\Purist\Http\Request;
 
 use phpmock\prophecy\PHPProphet;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 use Psr\Http\Message\RequestInterface;
-<<<<<<< Updated upstream
-use Psr\Http\Message\UriInterface;
-use Purist\Header\HttpHeaders;
-use Purist\Header;
-use Purist\Request\ParsedBody;
-use Purist\Request\Request;
-use Purist\Request\UploadedFile\UploadedFile;
-use Purist\Request\Uri;
-=======
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UriInterface;
 use Purist\Http\Request\ParsedBody;
 use Purist\Http\Request\ServerRequest;
->>>>>>> Stashed changes
 
 class ServerRequestSpec extends ObjectBehavior
 {
@@ -31,7 +21,8 @@ class ServerRequestSpec extends ObjectBehavior
 
     function it_is_initializable(RequestInterface $request)
     {
-        $this->shouldHaveType('Purist\Request\ServerRequest');
+        $this->shouldHaveType(ServerRequest::class);
+        $this->shouldImplement(ServerRequestInterface::class);
     }
 
     function it_returns_server_parameters(RequestInterface $request)

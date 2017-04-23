@@ -14,20 +14,18 @@
         "psr/http-message": "^1.0"
     },
     "require-dev": {
-<<<<<<< Updated upstream
-        "phpspec/phpspec": "^3.0"
-=======
         "phpspec/phpspec": "^3.0",
         "memio/spec-gen": "^0.7",
         "php-mock/php-mock-prophecy": "^0.0.2"
->>>>>>> Stashed changes
     },
     "config": {
         "bin-dir": "bin"
     },
     "autoload": {
         "psr-4": {
-            "Purist\\": "src/"
+            "Purist\\Http\\": "src/"
         }
-    }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }
