@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Purist\Response;
+namespace Purist\Http\Response;
 
 use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\ResponseInterface;

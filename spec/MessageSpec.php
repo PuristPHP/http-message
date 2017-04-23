@@ -1,13 +1,13 @@
 <?php
 
-namespace spec\Purist;
+namespace spec\Purist\Http;
 
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\StreamInterface;
-use Purist\Header\HttpHeaders;
-use Purist\Message;
+use Purist\Http\Header\HttpHeaders;
+use Purist\Http\Message;
 
 class MessageSpec extends ObjectBehavior
 {

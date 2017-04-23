@@ -1,13 +1,13 @@
 <?php
 
-namespace spec\Purist\Request;
+namespace spec\Purist\Http\Request;
 
 use PhpSpec\ObjectBehavior;
 use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UriInterface;
-use Purist\Request\Request;
+use Purist\Http\Request\Request;
 
 class RequestSpec extends ObjectBehavior
 {
