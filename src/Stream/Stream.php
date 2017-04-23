@@ -290,9 +290,10 @@ final class Stream implements StreamInterface
     }
 
     /**
+     * @return void
      * @throws RuntimeException if resource is detached from stream
      */
-    private function assertResource(): void
+    private function assertResource()
     {
         if (!is_resource($this->resource)) {
             throw new RuntimeException('Resource is detached from stream.');
