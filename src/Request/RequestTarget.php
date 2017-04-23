@@ -40,6 +40,11 @@ final class RequestTarget
         return $this->requestTargetForm;
     }
 
+    public function form(): string
+    {
+        return $this->requestTargetForm;
+    }
+
     private function originForm(): string
     {
         return implode(
@@ -67,10 +72,5 @@ final class RequestTarget
                 ]
             )
         );
-    }
-
-    public function form(): string
-    {
-        return $this->requestTargetForm;
     }
 }

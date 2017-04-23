@@ -40,7 +40,7 @@ final class HttpHeaders implements Headers
      */
     public function toArray(): array
     {
-        return array_map(function($item) {
+        return array_map(function ($item) {
             return (array) $item;
         }, $this->headers);
     }
@@ -56,7 +56,7 @@ final class HttpHeaders implements Headers
     public function has($name): bool
     {
         return array_key_exists(
-            strtolower($name),
+            mb_strtolower($name),
             array_change_key_case($this->headers, CASE_LOWER)
         );
     }
@@ -81,7 +81,7 @@ final class HttpHeaders implements Headers
             return [];
         }
 
-        return (array) array_change_key_case($this->headers, CASE_LOWER)[strtolower($name)];
+        return (array) array_change_key_case($this->headers, CASE_LOWER)[mb_strtolower($name)];
     }
 
     /**
@@ -131,7 +131,7 @@ final class HttpHeaders implements Headers
             array_merge(
                 $this->remove($header->name())->toArray(),
                 [
-                    $header->name() => (array) $header->value()
+                    $header->name() => (array) $header->value(),
                 ]
             )
         );
@@ -170,8 +170,8 @@ final class HttpHeaders implements Headers
                     },
                     array_filter(
                         $this->headers,
-                        function($key) use ($header) {
-                            return strtolower($key) === strtolower($header->name());
+                        function ($key) use ($header) {
+                            return mb_strtolower($key) === mb_strtolower($header->name());
                         },
                         ARRAY_FILTER_USE_KEY
                     )
@@ -197,8 +197,8 @@ final class HttpHeaders implements Headers
         return new self(
             array_filter(
                 $this->headers,
-                function($header) use ($name) {
-                    return strtolower($name) !== strtolower($header);
+                function ($header) use ($name) {
+                    return mb_strtolower($name) !== mb_strtolower($header);
                 },
                 ARRAY_FILTER_USE_KEY
             )

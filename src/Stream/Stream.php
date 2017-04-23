@@ -52,7 +52,6 @@ final class Stream implements StreamInterface
     /**
      * Closes the stream and any underlying resources.
      *
-     * @return void
      */
     public function close()
     {
@@ -290,7 +289,6 @@ final class Stream implements StreamInterface
     }
 
     /**
-     * @return void
      * @throws RuntimeException if resource is detached from stream
      */
     private function assertResource()

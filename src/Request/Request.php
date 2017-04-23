@@ -92,7 +92,7 @@ final class Request implements RequestInterface
      */
     public function getHeaders()
     {
-       return $this->message->getHeaders();
+        return $this->message->getHeaders();
     }
 
     /**

@@ -8,8 +8,8 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UriInterface;
-use Purist\Http\Header\HttpHeaders;
 use Purist\Http\Header\Header;
+use Purist\Http\Header\HttpHeaders;
 use Purist\Http\Message;
 use Purist\Http\Request\UploadedFile\ProcessedUploadedFiles;
 use Purist\Http\Stream\LazyStream;
@@ -58,28 +58,6 @@ final class ServerRequest implements ServerRequestInterface
             $_FILES,
             !empty($_POST) ? new ParsedBody($_POST) : null
         );
-    }
-
-    private static function createUriFromGlobals()
-    {
-        @list($host, $port) = explode(
-            ':',
-            $_SERVER['HTTP_HOST'] ?? $_SERVER['SERVER_NAME'] ?? $_SERVER['SERVER_ADDR'] ?? ''
-        );
-        @list($path, $query) = explode('?', $_SERVER['REQUEST_URI'] ?? '');
-        @list($query, $fragment) = explode('#', $query ?? '');
-
-        return (new Uri)
-            ->withScheme(
-                !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off'
-                    ? 'https'
-                    : 'http'
-            )
-            ->withHost($host)
-            ->withPort($port ?? $_SERVER['SERVER_PORT'] ?? 80)
-            ->withPath($path !== '' ? $path : null)
-            ->withQuery($query !== '' ? $query : $_SERVER['QUERY_STRING'] ?? null)
-            ->withFragment($fragment);
     }
 
     /**
@@ -761,10 +739,32 @@ final class ServerRequest implements ServerRequestInterface
             array_filter(
                 $this->attributes,
                 function ($key) use ($name) {
-                    return strtolower($key) !== strtolower($name);
+                    return mb_strtolower($key) !== mb_strtolower($name);
                 },
                 ARRAY_FILTER_USE_KEY
             )
         );
+    }
+
+    private static function createUriFromGlobals()
+    {
+        @list($host, $port) = explode(
+            ':',
+            $_SERVER['HTTP_HOST'] ?? $_SERVER['SERVER_NAME'] ?? $_SERVER['SERVER_ADDR'] ?? ''
+        );
+        @list($path, $query) = explode('?', $_SERVER['REQUEST_URI'] ?? '');
+        @list($query, $fragment) = explode('#', $query ?? '');
+
+        return (new Uri())
+            ->withScheme(
+                !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off'
+                    ? 'https'
+                    : 'http'
+            )
+            ->withHost($host)
+            ->withPort($port ?? $_SERVER['SERVER_PORT'] ?? 80)
+            ->withPath($path !== '' ? $path : null)
+            ->withQuery($query !== '' ? $query : $_SERVER['QUERY_STRING'] ?? null)
+            ->withFragment($fragment);
     }
 }
