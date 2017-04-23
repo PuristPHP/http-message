@@ -1,6 +1,7 @@
 {
     "name": "purist/http-message",
     "description": "PSR7 implementation of http messages",
+    "keywords": ["psr7", "http", "message", "request", "response", "stream", "uri", "url"],
     "type": "library",
     "license": "MIT",
     "authors": [
