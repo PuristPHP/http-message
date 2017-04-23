@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Purist\Request\UploadedFile;
+namespace Purist\Http\Request\UploadedFile;
 
 interface UploadedFiles
 {

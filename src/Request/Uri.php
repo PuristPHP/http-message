@@ -1,6 +1,6 @@
 <?php
 
-namespace Purist\Request;
+namespace Purist\Http\Request;
 
 use InvalidArgumentException;
 use PhpSpec\Exception\Exception;

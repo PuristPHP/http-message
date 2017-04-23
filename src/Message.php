@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Purist;
+namespace Purist\Http;
 
 use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\StreamInterface;
-use Purist\Header\Headers;
-use Purist\Header\HttpHeaders;
+use Purist\Http\Header\Headers;
+use Purist\Http\Header\HttpHeaders;
 
 final class Message implements MessageInterface
 {
