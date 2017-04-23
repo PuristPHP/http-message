@@ -1,4 +1,6 @@
 suites:
     acme_suite:
-        namespace: Purist
-        psr4_prefix: Purist
+        namespace: Purist\Http
+        psr4_prefix: Purist\Http
+extensions:
+    Memio\SpecGen\MemioSpecGenExtension: ~
