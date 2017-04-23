@@ -1,12 +1,11 @@
 <?php
 
-namespace spec\Purist\Http\Request;
+namespace spec\Purist\Request;
 
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\UriInterface;
-use Purist\Http\Request\RequestUri;
 
 class RequestUriSpec extends ObjectBehavior
 {
@@ -17,7 +16,7 @@ class RequestUriSpec extends ObjectBehavior
 
     function it_is_initializable()
     {
-        $this->shouldHaveType(RequestUri::class);
+        $this->shouldHaveType('Purist\Request\RequestUri');
     }
 
     function it_represents_the_request_uri_string($request, UriInterface $uri)

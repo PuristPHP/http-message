@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Purist\Http\Request\UploadedFile;
+namespace Purist\Request\UploadedFile;
 
 use GuzzleHttp\Psr7\LazyOpenStream;
 use InvalidArgumentException;

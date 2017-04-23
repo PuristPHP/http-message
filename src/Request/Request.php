@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Purist\Http\Request;
+namespace Purist\Request;
 
 use GuzzleHttp\Psr7\Stream;
 use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UriInterface;
-use Purist\Http\Message;
+use Purist\Message;
 
 final class Request implements RequestInterface
 {
