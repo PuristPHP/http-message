@@ -1,10 +1,10 @@
 <?php
 
-namespace spec\Purist\Response;
+namespace spec\Purist\Http\Response;
 
 use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\ResponseInterface;
-use Purist\Response\Response;
+use Purist\Http\Response\Response;
 use PhpSpec\ObjectBehavior;
 
 class ResponseSpec extends ObjectBehavior

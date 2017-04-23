@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Purist\Request;
+namespace Purist\Http\Request;
 
 use GuzzleHttp\Psr7\LazyOpenStream;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UriInterface;
-use Purist\Header\HttpHeaders;
-use Purist\Header\Header;
-use Purist\Message;
-use Purist\Request\UploadedFile\ProcessedUploadedFiles;
+use Purist\Http\Header\HttpHeaders;
+use Purist\Http\Header\Header;
+use Purist\Http\Message;
+use Purist\Http\Request\UploadedFile\ProcessedUploadedFiles;
 
 final class ServerRequest implements ServerRequestInterface
 {
