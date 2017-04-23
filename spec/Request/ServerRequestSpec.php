@@ -2,11 +2,11 @@
 
 namespace spec\Purist\Request;
 
-use GuzzleHttp\Psr7\LazyOpenStream;
-use GuzzleHttp\Psr7\Stream;
+use phpmock\prophecy\PHPProphet;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 use Psr\Http\Message\RequestInterface;
+<<<<<<< Updated upstream
 use Psr\Http\Message\UriInterface;
 use Purist\Header\HttpHeaders;
 use Purist\Header;
@@ -14,6 +14,13 @@ use Purist\Request\ParsedBody;
 use Purist\Request\Request;
 use Purist\Request\UploadedFile\UploadedFile;
 use Purist\Request\Uri;
+=======
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\StreamInterface;
+use Psr\Http\Message\UriInterface;
+use Purist\Http\Request\ParsedBody;
+use Purist\Http\Request\ServerRequest;
+>>>>>>> Stashed changes
 
 class ServerRequestSpec extends ObjectBehavior
 {
@@ -79,6 +86,12 @@ class ServerRequestSpec extends ObjectBehavior
 
     function it_returns_uploaded_files_parameters(RequestInterface $request)
     {
+        // Mock is_uploaded_file since it's not a real request
+        $prophet = new PHPProphet();
+        $prophecy = $prophet->prophesize('Purist\\Http\\Request\\UploadedFile');
+        $prophecy->is_uploaded_file('/tmp/SAkakekA')->willReturn(true);
+        $prophecy->reveal();
+
         $this->beConstructedWith(
             $request,
             [],
@@ -113,7 +126,7 @@ class ServerRequestSpec extends ObjectBehavior
 
         $files['inputName']
             ->callOnWrappedObject('getStream')
-            ->shouldImplement('Psr\Http\Message\StreamInterface');
+            ->shouldImplement(StreamInterface::class);
     }
 
     function it_returns_parsed_body(RequestInterface $request)

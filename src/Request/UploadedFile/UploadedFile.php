@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Purist\Request\UploadedFile;
 
-use GuzzleHttp\Psr7\LazyOpenStream;
 use InvalidArgumentException;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UploadedFileInterface;
+use Purist\Http\Stream\LazyStream;
 use RuntimeException;
 
 final class UploadedFile implements UploadedFileInterface
@@ -46,12 +46,12 @@ final class UploadedFile implements UploadedFileInterface
     public function getStream()
     {
         if (!is_uploaded_file($this->tmpName)) {
-            new RuntimeException(
+            throw new RuntimeException(
                 sprintf('%s is not an uploaded file', $this->tmpName)
             );
         }
 
-        return new LazyOpenStream($this->tmpName, '+r');
+        return new LazyStream($this->tmpName, 'r+');
     }
 
     /**
