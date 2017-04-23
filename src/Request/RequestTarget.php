@@ -17,8 +17,8 @@ final class RequestTarget
     private $uri;
 
     public function __construct(
-        string $requestTargetForm = self::ORIGIN_FORM,
-        UriInterface $uri
+        UriInterface $uri,
+        string $requestTargetForm = self::ORIGIN_FORM
     ) {
         $this->requestTargetForm = $requestTargetForm;
         $this->uri = $uri;

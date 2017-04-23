@@ -202,7 +202,7 @@ final class Uri implements UriInterface
      */
     public function getPath()
     {
-        return $this->rawUrlEncode($this->path);
+        return $this->rawUrlEncode($this->path ?? '');
     }
 
     /**
@@ -227,7 +227,7 @@ final class Uri implements UriInterface
      */
     public function getQuery()
     {
-        return $this->rawUrlEncode($this->query);
+        return $this->rawUrlEncode($this->query ?? '');
     }
 
     /**

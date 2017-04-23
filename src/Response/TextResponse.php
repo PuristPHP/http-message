@@ -14,7 +14,7 @@ final class TextResponse implements ResponseInterface
 {
     private $response;
 
-    public function __construct(int $statusCode = 200, string $text, Headers $headers = null)
+    public function __construct(string $text, int $statusCode = 200, Headers $headers = null)
     {
         $this->response = new Response(
             new Message(new LazyReadOnlyTextStream($text), $headers),
