@@ -76,6 +76,7 @@ return PhpCsFixer\Config::create()
         'strict_param'                          => true,
         'ternary_to_null_coalescing'            => true,
         'trailing_comma_in_multiline_array'     => true,
+        'declare_strict_types'                  => true,
     ])
     ->setFinder(
         PhpCsFixer\Finder::create()->in(__DIR__ . '/src')
