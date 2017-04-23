@@ -1,21 +1,19 @@
 <?php
 
-namespace spec\Purist\Http\Request;
+namespace spec\Purist\Request;
 
 use GuzzleHttp\Psr7\LazyOpenStream;
 use GuzzleHttp\Psr7\Stream;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UriInterface;
-use Purist\Http\Header\HttpHeaders;
-use Purist\Http\Header;
-use Purist\Http\Request\ParsedBody;
-use Purist\Http\Request\Request;
-use Purist\Http\Request\ServerRequest;
-use Purist\Http\Request\UploadedFile\UploadedFile;
-use Purist\Http\Request\Uri;
+use Purist\Header\HttpHeaders;
+use Purist\Header;
+use Purist\Request\ParsedBody;
+use Purist\Request\Request;
+use Purist\Request\UploadedFile\UploadedFile;
+use Purist\Request\Uri;
 
 class ServerRequestSpec extends ObjectBehavior
 {
@@ -26,8 +24,7 @@ class ServerRequestSpec extends ObjectBehavior
 
     function it_is_initializable(RequestInterface $request)
     {
-        $this->shouldHaveType(ServerRequest::class);
-        $this->shouldImplement(ServerRequestInterface::class);
+        $this->shouldHaveType('Purist\Request\ServerRequest');
     }
 
     function it_returns_server_parameters(RequestInterface $request)

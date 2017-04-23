@@ -1,6 +1,6 @@
 <?php
 
-namespace spec\Purist\Http\Request;
+namespace spec\Purist\Request;
 
 use InvalidArgumentException;
 use PhpSpec\ObjectBehavior;

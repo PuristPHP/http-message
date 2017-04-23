@@ -1,11 +1,11 @@
 <?php
 
-namespace spec\Purist\Http\Header;
+namespace spec\Purist\Header;
 
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
-use Purist\Http\Header\Headers;
-use Purist\Http\Header\HttpHeaders;
+use Purist\Header\Headers;
+use Purist\Header\HttpHeaders;
 
 class HttpHeadersSpec extends ObjectBehavior
 {
