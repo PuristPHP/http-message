@@ -3,50 +3,37 @@ declare(strict_types=1);
 
 namespace Purist\Http\Request\UploadedFile;
 
+use InvalidArgumentException;
+use Psr\Http\Message\UploadedFileInterface;
+
 final class ProcessedUploadedFiles implements UploadedFiles
 {
-    private $uploadedFilesParams;
+    private $uploadedFiles;
 
-    public function __construct(array $uploadedFilesParams)
+    public function __construct(array $processedUploadedFiles)
     {
-        $this->uploadedFilesParams = $uploadedFilesParams;
+        array_walk_recursive($processedUploadedFiles, [$this, 'assertUploadedFile']);
+
+        $this->uploadedFiles = $processedUploadedFiles;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function toArray(): array
     {
-        $uploadedFiles = [];
-
-        foreach ($this->uploadedFilesParams as $inputName => $file) {
-            $uploadedFiles[$inputName] = is_array($file['tmp_name'])
-                ? $this->nestedUploadedFiles($file)
-                : new UploadedFile(
-                    $file['name'],
-                    $file['type'],
-                    $file['size'],
-                    $file['tmp_name'],
-                    $file['error']
-                );
-        }
-
-        return $uploadedFiles;
+        return $this->uploadedFiles;
     }
 
-    private function nestedUploadedFiles(array $file)
+    private function assertUploadedFile($leaf)
     {
-        return array_reduce(
-            array_keys($file['tmp_name']),
-            function ($inputNameKey, $carry) use ($file) {
-                $carry[$inputNameKey] = new UploadedFile(
-                    $file['name'][$inputNameKey],
-                    $file['type'][$inputNameKey],
-                    $file['size'][$inputNameKey],
-                    $file['tmp_name'][$inputNameKey],
-                    $file['error'][$inputNameKey]
-                );
-
-                return $carry;
-            },
-            []
-        );
+        if (!$leaf instanceof UploadedFileInterface) {
+            throw new InvalidArgumentException(
+                sprintf(
+                    'Leafs of valid uploaded files array needs to be instance of %s',
+                    UploadedFileInterface::class
+                )
+            );
+        }
     }
 }

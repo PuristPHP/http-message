@@ -2,21 +2,21 @@
 
 namespace spec\Purist\Http\Request;
 
-use phpmock\prophecy\PHPProphet;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Message\StreamInterface;
+use Psr\Http\Message\UploadedFileInterface;
 use Psr\Http\Message\UriInterface;
 use Purist\Http\Request\ParsedBody;
 use Purist\Http\Request\ServerRequest;
+use Purist\Http\Request\UploadedFile\UploadedFiles;
 
 class ServerRequestSpec extends ObjectBehavior
 {
-    function let(RequestInterface $request)
+    function let(RequestInterface $request, UploadedFiles $uploadedFiles)
     {
-        $this->beConstructedWith($request, [], [], []);
+        $this->beConstructedWith($request, [], [], $uploadedFiles);
     }
 
     function it_is_initializable(RequestInterface $request)
@@ -25,21 +25,21 @@ class ServerRequestSpec extends ObjectBehavior
         $this->shouldImplement(ServerRequestInterface::class);
     }
 
-    function it_returns_server_parameters(RequestInterface $request)
+    function it_returns_server_parameters(RequestInterface $request, $uploadedFiles)
     {
-        $this->beConstructedWith($request, ['REQUEST_URI' => '/'], [], []);
+        $this->beConstructedWith($request, ['REQUEST_URI' => '/'], [], $uploadedFiles);
         $this->getServerParams()->shouldReturn(['REQUEST_URI' => '/']);
     }
 
-    function it_returns_cookie_parameters(RequestInterface $request)
+    function it_returns_cookie_parameters(RequestInterface $request, $uploadedFiles)
     {
-        $this->beConstructedWith($request, [], ['test' => true], []);
+        $this->beConstructedWith($request, [], ['test' => true], $uploadedFiles);
         $this->getCookieParams()->shouldReturn(['test' => true]);
     }
 
-    function it_updates_cookie_parameters(RequestInterface $request)
+    function it_updates_cookie_parameters(RequestInterface $request, $uploadedFiles)
     {
-        $this->beConstructedWith($request, [], ['test' => true], []);
+        $this->beConstructedWith($request, [], ['test' => true], $uploadedFiles);
         $this->withCookieParams(['test' => false])
             ->callOnWrappedObject('getCookieParams')
             ->shouldReturn(['test' => false]);
@@ -75,58 +75,37 @@ class ServerRequestSpec extends ObjectBehavior
             ->shouldReturn($queryParams);
     }
 
-    function it_returns_uploaded_files_parameters(RequestInterface $request)
-    {
-        // Mock is_uploaded_file since it's not a real request
-        $prophet = new PHPProphet();
-        $prophecy = $prophet->prophesize('Purist\\Http\\Request\\UploadedFile');
-        $prophecy->is_uploaded_file('/tmp/SAkakekA')->willReturn(true);
-        $prophecy->reveal();
-
-        $this->beConstructedWith(
-            $request,
-            [],
-            [],
-            [
-                'inputName' => [
-                    'name' => 'index.html',
-                    'type' => 'text/html',
-                    'size' => '500',
-                    'tmp_name' => '/tmp/SAkakekA',
-                    'error' => UPLOAD_ERR_OK,
-                ],
-            ]
-        );
-
-        $files = $this->getUploadedFiles();
-        $files['inputName']
-            ->callOnWrappedObject('getClientFilename')
-            ->shouldReturn('index.html');
-
-        $files['inputName']
-            ->callOnWrappedObject('getClientMediaType')
-            ->shouldReturn('text/html');
-
-        $files['inputName']
-            ->callOnWrappedObject('getSize')
-            ->shouldReturn(500);
-
-        $files['inputName']
-            ->callOnWrappedObject('getError')
-            ->shouldReturn(UPLOAD_ERR_OK);
-
-        $files['inputName']
-            ->callOnWrappedObject('getStream')
-            ->shouldImplement(StreamInterface::class);
+    function it_returns_uploaded_files_parameters(
+        UploadedFiles $uploadedFiles,
+        UploadedFileInterface $uploadedFile
+    ) {
+        $uploadedFiles->toArray()->willReturn(['inputName' => $uploadedFile]);
+        $this->getUploadedFiles()->shouldReturn(['inputName' => $uploadedFile]);
     }
 
-    function it_returns_parsed_body(RequestInterface $request)
+    function it_returns_new_instance_with_parsed_uploaded_files(
+        UploadedFileInterface $uploadedFile
+    ) {
+        $this->withUploadedFiles(['changedInputName' => $uploadedFile])
+            ->callOnWrappedObject('getUploadedFiles')
+            ->shouldReturn(['changedInputName' => $uploadedFile]);
+    }
+
+    function it_will_throw_exeption_when_passing_invalid_uploaded_files_array(
+        UploadedFileInterface $uploadedFile
+    ) {
+        $this
+            ->shouldThrow(\InvalidArgumentException::class)
+            ->duringWithUploadedFiles(['changedInputName' => Argument::not($uploadedFile)]);
+    }
+
+    function it_returns_parsed_body(RequestInterface $request, $uploadedFiles)
     {
         $this->beConstructedWith(
             $request,
             [],
             [],
-            [],
+            $uploadedFiles,
             new ParsedBody(['name' => 'Nicholas Ruunu', 'status' => 1])
         );
 

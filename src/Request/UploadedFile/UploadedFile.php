@@ -17,8 +17,13 @@ final class UploadedFile implements UploadedFileInterface
     private $tmpName;
     private $error;
 
-    public function __construct(string $name, string $type, $size, string $tmpName, int $error)
-    {
+    public function __construct(
+        ?string $name,
+        ?string $type,
+        ?int $size,
+        ?string $tmpName,
+        int $error
+    ) {
         $this->name = $name;
         $this->type = $type;
         $this->size = $size;
@@ -111,7 +116,7 @@ final class UploadedFile implements UploadedFileInterface
      */
     public function getSize()
     {
-        return isset($this->size) ? (int) $this->size : null;
+        return $this->size;
     }
 
     /**

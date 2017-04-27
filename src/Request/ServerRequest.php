@@ -11,6 +11,8 @@ use Purist\Http\Header\Header;
 use Purist\Http\Header\HttpHeaders;
 use Purist\Http\Message;
 use Purist\Http\Request\UploadedFile\ProcessedUploadedFiles;
+use Purist\Http\Request\UploadedFile\RawUploadedFiles;
+use Purist\Http\Request\UploadedFile\UploadedFiles;
 use Purist\Http\Stream\LazyStream;
 
 final class ServerRequest implements ServerRequestInterface
@@ -26,7 +28,7 @@ final class ServerRequest implements ServerRequestInterface
         RequestInterface $request,
         array $serverParams,
         array $cookieParams,
-        array $uploadedFiles,
+        UploadedFiles $uploadedFiles,
         ParsedBody $parsedBody = null,
         array $attributes = []
     ) {
@@ -54,7 +56,7 @@ final class ServerRequest implements ServerRequestInterface
             ),
             $_SERVER,
             $_COOKIE,
-            $_FILES,
+            new RawUploadedFiles($_FILES),
             !empty($_POST) ? new ParsedBody($_POST) : null
         );
     }
@@ -560,7 +562,7 @@ final class ServerRequest implements ServerRequestInterface
      */
     public function getUploadedFiles()
     {
-        return (new ProcessedUploadedFiles($this->uploadedFiles))->toArray();
+        return $this->uploadedFiles->toArray();
     }
 
     /**
@@ -580,7 +582,7 @@ final class ServerRequest implements ServerRequestInterface
             $this->request,
             $this->serverParams,
             $this->cookieParams,
-            $uploadedFiles,
+            new ProcessedUploadedFiles($uploadedFiles),
             $this->parsedBody,
             $this->attributes
         );
