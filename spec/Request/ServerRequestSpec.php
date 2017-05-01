@@ -121,14 +121,4 @@ class ServerRequestSpec extends ObjectBehavior
             ->callOnWrappedObject('getParsedBody')
             ->shouldReturn($parsedBody);
     }
-
-    function it_constructs_from_globals()
-    {
-        $_SERVER['REQUEST_URI'] = '/path';
-        $_POST['text'] = 'hello';
-
-       $this->beConstructedThrough('fromGlobals');
-       $this->getUri()->callOnWrappedObject('getPath')->shouldReturn('/path');
-       $this->getParsedBody()->shouldReturn(['text' => 'hello']);
-    }
 }
