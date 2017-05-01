@@ -40,27 +40,6 @@ final class ServerRequest implements ServerRequestInterface
         $this->attributes = $attributes;
     }
 
-    public static function fromGlobals(): self
-    {
-        return new self(
-            new Request(
-                self::createUriFromGlobals(),
-                new Message(
-                    new LazyStream('php://input', 'r'),
-                    new HttpHeaders(
-                        function_exists('getallheaders') ? getallheaders() : []
-                    ),
-                    str_replace('HTTP/', '', $_SERVER['SERVER_PROTOCOL'] ?? '1.1')
-                ),
-                $_SERVER['REQUEST_METHOD'] ?? 'GET'
-            ),
-            $_SERVER,
-            $_COOKIE,
-            new RawUploadedFiles($_FILES),
-            !empty($_POST) ? new ParsedBody($_POST) : null
-        );
-    }
-
     /**
      * Retrieves the HTTP protocol version as a string.
      *
@@ -745,27 +724,5 @@ final class ServerRequest implements ServerRequestInterface
                 ARRAY_FILTER_USE_KEY
             )
         );
-    }
-
-    private static function createUriFromGlobals()
-    {
-        @list($host, $port) = explode(
-            ':',
-            $_SERVER['HTTP_HOST'] ?? $_SERVER['SERVER_NAME'] ?? $_SERVER['SERVER_ADDR'] ?? ''
-        );
-        @list($path, $query) = explode('?', $_SERVER['REQUEST_URI'] ?? '');
-        @list($query, $fragment) = explode('#', $query ?? '');
-
-        return (new Uri())
-            ->withScheme(
-                !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off'
-                    ? 'https'
-                    : 'http'
-            )
-            ->withHost($host)
-            ->withPort($port ?? $_SERVER['SERVER_PORT'] ?? 80)
-            ->withPath($path !== '' ? $path : null)
-            ->withQuery($query !== '' ? $query : $_SERVER['QUERY_STRING'] ?? null)
-            ->withFragment($fragment);
     }
 }
