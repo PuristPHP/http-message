@@ -8,7 +8,7 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UploadedFileInterface;
 use Psr\Http\Message\UriInterface;
-use Purist\Http\Request\ParsedBody;
+use Purist\Http\Request\ParsedBody\RawParsedBody;
 use Purist\Http\Request\ServerRequest;
 use Purist\Http\Request\UploadedFile\UploadedFiles;
 
@@ -106,7 +106,7 @@ class ServerRequestSpec extends ObjectBehavior
             [],
             [],
             $uploadedFiles,
-            new ParsedBody(['name' => 'Nicholas Ruunu', 'status' => 1])
+            new RawParsedBody(['name' => 'Nicholas Ruunu', 'status' => 1])
         );
 
         $this->getParsedBody()->shouldReturn(['name' => 'Nicholas Ruunu', 'status' => 1]);
@@ -120,5 +120,18 @@ class ServerRequestSpec extends ObjectBehavior
             ->withParsedBody($parsedBody)
             ->callOnWrappedObject('getParsedBody')
             ->shouldReturn($parsedBody);
+    }
+
+    function it_throw_exception_when_replacing_parsed_body_with_invalid_values()
+    {
+        $this
+            ->shouldThrow(\InvalidArgumentException::class)
+            ->duringWithParsedBody('invalid');
+        $this
+            ->shouldThrow(\InvalidArgumentException::class)
+            ->duringWithParsedBody(0);
+        $this
+            ->shouldThrow(\InvalidArgumentException::class)
+            ->duringWithParsedBody(true);
     }
 }

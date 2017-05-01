@@ -5,6 +5,7 @@ namespace Purist\Http\Request;
 
 use Purist\Http\Header\HttpHeaders;
 use Purist\Http\Message;
+use Purist\Http\Request\ParsedBody\RawParsedBody;
 use Purist\Http\Request\UploadedFile\RawUploadedFiles;
 use Purist\Http\Stream\LazyStream;
 
@@ -27,7 +28,7 @@ final class GlobalServerRequest
             $_SERVER,
             $_COOKIE,
             new RawUploadedFiles($_FILES),
-            !empty($_POST) ? new ParsedBody($_POST) : null
+            new RawParsedBody($_POST ?? null)
         );
     }
 

@@ -8,12 +8,10 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UriInterface;
 use Purist\Http\Header\Header;
-use Purist\Http\Header\HttpHeaders;
-use Purist\Http\Message;
+use Purist\Http\Request\ParsedBody\ParsedBody;
+use Purist\Http\Request\ParsedBody\RawParsedBody;
 use Purist\Http\Request\UploadedFile\ProcessedUploadedFiles;
-use Purist\Http\Request\UploadedFile\RawUploadedFiles;
 use Purist\Http\Request\UploadedFile\UploadedFiles;
-use Purist\Http\Stream\LazyStream;
 
 final class ServerRequest implements ServerRequestInterface
 {
@@ -36,7 +34,7 @@ final class ServerRequest implements ServerRequestInterface
         $this->serverParams = $serverParams;
         $this->cookieParams = $cookieParams;
         $this->uploadedFiles = $uploadedFiles;
-        $this->parsedBody = $parsedBody;
+        $this->parsedBody = $parsedBody ?? new RawParsedBody();
         $this->attributes = $attributes;
     }
 
@@ -584,7 +582,7 @@ final class ServerRequest implements ServerRequestInterface
      */
     public function getParsedBody()
     {
-        return $this->parsedBody !== null ? $this->parsedBody->get() : null;
+        return $this->parsedBody->get($this->getHeader('content-type'));
     }
 
     /**
@@ -622,7 +620,7 @@ final class ServerRequest implements ServerRequestInterface
             $this->serverParams,
             $this->cookieParams,
             $this->uploadedFiles,
-            $data !== null ? new ParsedBody($data) : null,
+            $this->parsedBody->withParsedBody($data),
             $this->attributes
         );
     }
