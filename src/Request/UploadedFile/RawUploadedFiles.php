@@ -20,7 +20,6 @@ final class RawUploadedFiles implements UploadedFiles
         if (empty($this->uploadedFiles)) {
             return [];
         }
-
         return $this->parseUploadedFiles($this->uploadedFiles);
     }
 
