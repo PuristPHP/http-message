@@ -21,32 +21,27 @@ final class RawUploadedFiles implements UploadedFiles
             return [];
         }
 
-        return $this->parseUploadedFiles($this->uploadedFiles);
+        return $this->processUploadedFiles($this->uploadedFiles);
     }
 
     /**
+     * Recursive method for processing uploaded files array from $_FILES
+     *
      * @return array Where leafs of the array are UploadedFile
      */
-    private function parseUploadedFiles(array $uploadedFiles)
+    private function processUploadedFiles(array $uploadedFiles)
     {
-        if (!array_key_exists('tmp_name', $uploadedFiles)) {
+        if ($this->isNested($uploadedFiles)) {
             return array_map([$this, __METHOD__], $uploadedFiles);
         }
 
-        if (is_array($uploadedFiles['tmp_name'])) {
+        if ($this->isArrayOfFiles($uploadedFiles)) {
             return array_map(
-                function ($key) use ($uploadedFiles) {
-                    return $this->parseUploadedFiles(
-                        [
-                            'name' => $uploadedFiles['name'][$key],
-                            'type' => $uploadedFiles['type'][$key],
-                            'size' => $uploadedFiles['size'][$key],
-                            'tmp_name' => $uploadedFiles['tmp_name'][$key],
-                            'error' => $uploadedFiles['error'][$key],
-                        ]
-                    );
-                },
-                array_keys($uploadedFiles['tmp_name'])
+                [$this, __METHOD__],
+                $this->normalizeMultipleUploadedFiles(
+                    $uploadedFiles,
+                    $this->arrayKeys($uploadedFiles)
+                )
             );
         }
 
@@ -57,5 +52,36 @@ final class RawUploadedFiles implements UploadedFiles
             $uploadedFiles['tmp_name'],
             $uploadedFiles['error']
         );
+    }
+
+    private function normalizeMultipleUploadedFiles(array $uploadedFiles, array $keys): array
+    {
+        return array_map(
+            function (int $key) use ($uploadedFiles) {
+                return [
+                    'name' => $uploadedFiles['name'][$key],
+                    'type' => $uploadedFiles['type'][$key],
+                    'size' => $uploadedFiles['size'][$key],
+                    'tmp_name' => $uploadedFiles['tmp_name'][$key],
+                    'error' => $uploadedFiles['error'][$key],
+                ];
+            },
+            $keys
+        );
+    }
+
+    private function isArrayOfFiles(array $uploadedFiles): bool
+    {
+        return is_array($uploadedFiles['tmp_name']);
+    }
+
+    private function arrayKeys(array $uploadedFiles): array
+    {
+        return array_keys($uploadedFiles['tmp_name']);
+    }
+
+    private function isNested(array $uploadedFiles): bool
+    {
+        return !array_key_exists('tmp_name', $uploadedFiles);
     }
 }
