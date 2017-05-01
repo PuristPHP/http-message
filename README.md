@@ -11,7 +11,7 @@ A package so central to your application and the web should be robust, simple an
 Any contributions to help with these goals are really appreciated.
 
 ## Requirements
-* PHP >=7.0
+* PHP >=7.1
 * mbstring extension
 
 ## Installation
