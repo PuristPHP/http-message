@@ -11,11 +11,11 @@ use Purist\Http\Stream\LazyStream;
 
 final class GlobalServerRequest
 {
-    public function create(): ServerRequest
+    public static function create(): ServerRequest
     {
         return new ServerRequest(
             new Request(
-                $this->createUriFromGlobals(),
+                static::createUriFromGlobals(),
                 new Message(
                     new LazyStream('php://input', 'r'),
                     new HttpHeaders(
@@ -32,7 +32,7 @@ final class GlobalServerRequest
         );
     }
 
-    private function createUriFromGlobals(): Uri
+    private static function createUriFromGlobals(): Uri
     {
         @list($host, $port) = explode(
             ':',
