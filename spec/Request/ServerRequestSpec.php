@@ -109,12 +109,15 @@ class ServerRequestSpec extends ObjectBehavior
             new RawParsedBody(['name' => 'Nicholas Ruunu', 'status' => 1])
         );
 
+        $request->getHeader('content-type')->willReturn(['text/plain']);
+
         $this->getParsedBody()->shouldReturn(['name' => 'Nicholas Ruunu', 'status' => 1]);
     }
 
-    function it_returns_new_instance_with_parsed_body()
+    function it_returns_new_instance_with_parsed_body(RequestInterface $request)
     {
         $parsedBody = ['name' => 'Nicholas Ruunu', 'status' => 1];
+        $request->getHeader('content-type')->willReturn(['text/plain']);
 
         $this
             ->withParsedBody($parsedBody)

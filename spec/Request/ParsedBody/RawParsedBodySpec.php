@@ -25,7 +25,7 @@ class RawParsedBodySpec extends ObjectBehavior
     {
         $data = (object) ['test'];
         $this->beConstructedWith($data);
-        $this->get('text/plain')->shouldReturn($data);
+        $this->get(['text/plain'])->shouldReturn($data);
     }
 
     function it_throws_exception_on_other_values()
@@ -38,12 +38,12 @@ class RawParsedBodySpec extends ObjectBehavior
     {
         $this
             ->withParsedBody($data = ['test'])
-            ->callOnWrappedObject('get', ['text/plain'])
+            ->callOnWrappedObject('get', [['text/plain']])
             ->shouldReturn($data);
 
         $this
             ->withParsedBody($data =(object) ['test'])
-            ->callOnWrappedObject('get', ['text/plain'])
+            ->callOnWrappedObject('get', [['text/plain']])
             ->shouldReturn($data);
     }
 

@@ -13,8 +13,8 @@ interface ParsedBody
     public function withParsedBody($parsedBody = null): self;
 
     /**
-     * @param string|string[] $contentType
+     * @param string[] $contentTypes
      * @return array|\stdClass|null
      */
-    public function get($contentType);
+    public function get(array $contentTypes);
 }
