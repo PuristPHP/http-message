@@ -17,7 +17,12 @@ Any contributions to help with these goals are really appreciated.
 ## Installation
     composer require purist/http-message
 
+## Run tests with docker
+This will run composer install and run the tests in one command with a docker-container 
+
+    docker-composer run test
+
 ## Author
-[Nicholas Ruunu](https://github.com/nicholasruunu) <nicholas@ruu.nu>
+[Nicholas Ruunu](https://github.com/nicholasruunu) \<nicholas@ruu.nu\>
 * Github: [nicholasruunu](https://github.com/nicholasruunu)
 * Twitter: [@nicholasruunu](https://twitter.com/nicholasruunu)
