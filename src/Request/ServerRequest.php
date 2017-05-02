@@ -620,7 +620,7 @@ final class ServerRequest implements ServerRequestInterface
             $this->serverParams,
             $this->cookieParams,
             $this->uploadedFiles,
-            $this->parsedBody->withParsedBody($data),
+            new RawParsedBody($data),
             $this->attributes
         );
     }

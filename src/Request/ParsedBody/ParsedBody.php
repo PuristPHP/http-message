@@ -6,13 +6,6 @@ namespace Purist\Http\Request\ParsedBody;
 interface ParsedBody
 {
     /**
-     * @param array|\stdClass|null $parsedBody
-     * @return ParsedBody
-     * @throws \InvalidArgumentException
-     */
-    public function withParsedBody($parsedBody = null): self;
-
-    /**
      * @param string[] $contentTypes
      * @return array|\stdClass|null
      */

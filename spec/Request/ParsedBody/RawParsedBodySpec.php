@@ -28,32 +28,9 @@ class RawParsedBodySpec extends ObjectBehavior
         $this->get(['text/plain'])->shouldReturn($data);
     }
 
-    function it_throws_exception_on_other_values()
+    function it_throws_exception_on_invalid_values()
     {
         $this->beConstructedWith('string');
         $this->shouldThrow(InvalidArgumentException::class)->duringInstantiation();
-    }
-
-    function it_can_replace_parsed_body()
-    {
-        $this
-            ->withParsedBody($data = ['test'])
-            ->callOnWrappedObject('get', [['text/plain']])
-            ->shouldReturn($data);
-
-        $this
-            ->withParsedBody($data =(object) ['test'])
-            ->callOnWrappedObject('get', [['text/plain']])
-            ->shouldReturn($data);
-    }
-
-    function it_will_throw_exception_when_replacing_with_invalid_values()
-    {
-        $this
-            ->shouldThrow(InvalidArgumentException::class)
-            ->duringWithParsedBody(1);
-        $this
-            ->shouldThrow(InvalidArgumentException::class)
-            ->duringWithParsedBody('test');
     }
 }

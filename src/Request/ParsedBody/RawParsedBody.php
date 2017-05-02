@@ -28,14 +28,6 @@ final class RawParsedBody implements ParsedBody
     /**
      * @inheritdoc
      */
-    public function withParsedBody($parsedBody = null): ParsedBody
-    {
-        return new self($parsedBody);
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function get(array $contentTypes)
     {
         return $this->parsedBody;
