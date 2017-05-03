@@ -11,6 +11,7 @@ use Psr\Http\Message\UriInterface;
 use Purist\Http\Request\ParsedBody\RawParsedBody;
 use Purist\Http\Request\ServerRequest;
 use Purist\Http\Request\UploadedFile\UploadedFiles;
+use Purist\Http\Stream\LazyReadOnlyTextStream;
 
 class ServerRequestSpec extends ObjectBehavior
 {
@@ -110,6 +111,7 @@ class ServerRequestSpec extends ObjectBehavior
         );
 
         $request->getHeader('content-type')->willReturn(['text/plain']);
+        $request->getBody()->willReturn(new LazyReadOnlyTextStream('Does not matter'));
 
         $this->getParsedBody()->shouldReturn(['name' => 'Nicholas Ruunu', 'status' => 1]);
     }
@@ -118,6 +120,7 @@ class ServerRequestSpec extends ObjectBehavior
     {
         $parsedBody = ['name' => 'Nicholas Ruunu', 'status' => 1];
         $request->getHeader('content-type')->willReturn(['text/plain']);
+        $request->getBody()->willReturn(new LazyReadOnlyTextStream('Does not matter'));
 
         $this
             ->withParsedBody($parsedBody)
