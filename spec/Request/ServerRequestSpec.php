@@ -6,6 +6,7 @@ use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UploadedFileInterface;
 use Psr\Http\Message\UriInterface;
 use Purist\Http\Request\ParsedBody\RawParsedBody;
@@ -100,7 +101,7 @@ class ServerRequestSpec extends ObjectBehavior
             ->duringWithUploadedFiles(['changedInputName' => Argument::not($uploadedFile)]);
     }
 
-    function it_returns_parsed_body(RequestInterface $request, $uploadedFiles)
+    function it_returns_parsed_body(RequestInterface $request, StreamInterface $stream, $uploadedFiles)
     {
         $this->beConstructedWith(
             $request,
@@ -111,16 +112,16 @@ class ServerRequestSpec extends ObjectBehavior
         );
 
         $request->getHeader('content-type')->willReturn(['text/plain']);
-        $request->getBody()->willReturn(new LazyReadOnlyTextStream('Does not matter'));
+        $request->getBody()->willReturn($stream);
 
         $this->getParsedBody()->shouldReturn(['name' => 'Nicholas Ruunu', 'status' => 1]);
     }
 
-    function it_returns_new_instance_with_parsed_body(RequestInterface $request)
+    function it_returns_new_instance_with_parsed_body(RequestInterface $request, StreamInterface $stream)
     {
         $parsedBody = ['name' => 'Nicholas Ruunu', 'status' => 1];
         $request->getHeader('content-type')->willReturn(['text/plain']);
-        $request->getBody()->willReturn(new LazyReadOnlyTextStream('Does not matter'));
+        $request->getBody()->willReturn($stream);
 
         $this
             ->withParsedBody($parsedBody)

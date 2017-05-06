@@ -8,7 +8,6 @@ use Prophecy\Argument;
 use Psr\Http\Message\StreamInterface;
 use Purist\Http\Request\ParsedBody\ParsedBody;
 use Purist\Http\Request\ParsedBody\RawParsedBody;
-use Purist\Http\Stream\LazyReadOnlyTextStream;
 
 class RawParsedBodySpec extends ObjectBehavior
 {
