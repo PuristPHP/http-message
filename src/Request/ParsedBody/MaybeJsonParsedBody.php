@@ -19,14 +19,20 @@ final class MaybeJsonParsedBody implements ParsedBody
      */
     public function parse(array $contentTypes, StreamInterface $stream)
     {
-        if (!$this->isValid($contentTypes)) {
+        if (!$this->hasValidContentType($contentTypes)) {
             return $this->parsedBody->parse($contentTypes, $stream);
         }
 
-        return json_decode($stream->getContents());
+        $json = $stream->getContents();
+
+        if ($json && null === $decodedJson = json_decode($json)) {
+            return $this->parsedBody->parse($contentTypes, $stream);
+        }
+
+        return $decodedJson;
     }
 
-    private function isValid(array $contentTypes): bool
+    private function hasValidContentType(array $contentTypes): bool
     {
         return (bool) array_filter(
             array_map('mb_strtolower', $contentTypes),

@@ -39,11 +39,11 @@ class MaybeJsonParsedBodySpec extends ObjectBehavior
             ->shouldHaveProperty(['aTest', 20]);
     }
 
-    function it_should_give_null_value_on_invalid_json()
+    function it_should_give_raw_value_on_invalid_json()
     {
         $this
             ->parse(['application/json'], new LazyReadOnlyTextStream($json = '{\'aTest\':20}'))
-            ->shouldReturn(null);
+            ->shouldReturn(['test']);
     }
 
     function it_should_give_raw_value_when_content_types_is_not_json(StreamInterface $stream)
