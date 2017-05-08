@@ -8,7 +8,7 @@ use Psr\Http\Message\StreamInterface;
 interface ParsedBody
 {
     /**
-     * @return array|\stdClass|null
+     * @return array|object|null
      */
     public function parse(array $contentTypes, StreamInterface $stream);
 }

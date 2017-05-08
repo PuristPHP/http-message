@@ -30,8 +30,10 @@ final class GlobalServerRequest
             $_SERVER,
             $_COOKIE,
             new RawUploadedFiles($_FILES),
-            new MaybeJsonParsedBody(
-                new RawParsedBody($_POST ?? null)
+            new MaybeXmlParsedBody(
+                new MaybeJsonParsedBody(
+                    new RawParsedBody($_POST ?? null)
+                )
             )
         );
     }

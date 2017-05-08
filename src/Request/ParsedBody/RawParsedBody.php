@@ -5,7 +5,6 @@ namespace Purist\Http\Request\ParsedBody;
 
 use InvalidArgumentException;
 use Psr\Http\Message\StreamInterface;
-use stdClass;
 
 final class RawParsedBody implements ParsedBody
 {
@@ -35,6 +34,6 @@ final class RawParsedBody implements ParsedBody
 
     private function isValid($parsedBody): bool
     {
-        return is_array($parsedBody) || $parsedBody instanceof stdClass || $parsedBody === null;
+        return is_array($parsedBody) || is_object($parsedBody) || $parsedBody === null;
     }
 }
