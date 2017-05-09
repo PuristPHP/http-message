@@ -30,6 +30,11 @@ class MaybeXmlParsedBodySpec extends ObjectBehavior
             ->parse(['text/xml'], new LazyReadOnlyTextStream('<XmlTag>Hello</XmlTag>'))
             ->callOnWrappedObject('xpath', ['/XmlTag'])
             ->shouldHaveSimpleXMLElementWithText('Hello');
+
+        $this
+            ->parse(['application/rss+xml'], new LazyReadOnlyTextStream('<RssTag>World</RssTag>'))
+            ->callOnWrappedObject('xpath', ['/RssTag'])
+            ->shouldHaveSimpleXMLElementWithText('World');
     }
 
     function it_should_give_raw_value_when_content_types_is_not_xml(StreamInterface $stream)

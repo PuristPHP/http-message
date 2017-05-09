@@ -19,15 +19,21 @@ final class MaybeXmlParsedBody implements ParsedBody
      */
     public function parse(array $contentTypes, StreamInterface $stream)
     {
-        $contentTypes = array_map('mb_strtolower', $contentTypes);
-
-        if (
-            !in_array('text/xml', $contentTypes, true)
-            && !in_array('application/xml', $contentTypes, true)
-        ) {
+        if (!$this->hasValidContentType($contentTypes)) {
             return $this->parsedBody->parse($contentTypes, $stream);
         }
 
         return simplexml_load_string($stream->getContents());
+    }
+
+    private function hasValidContentType(array $contentTypes): bool
+    {
+        return (bool) array_filter(
+            array_map('mb_strtolower', $contentTypes),
+            function (string $contentType) {
+                return $contentType === 'text/xml'
+                    || preg_match('(\+xml$)', $contentType);
+            }
+        );
     }
 }
