@@ -5,6 +5,7 @@ namespace spec\Purist\Http\Request\ParsedBody;
 use InvalidArgumentException;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
+use Psr\Http\Message\StreamInterface;
 use Purist\Http\Request\ParsedBody\ParsedBody;
 use Purist\Http\Request\ParsedBody\RawParsedBody;
 
@@ -21,11 +22,9 @@ class RawParsedBodySpec extends ObjectBehavior
         $this->shouldImplement(ParsedBody::class);
     }
 
-    function it_returns_parsed_body()
+    function it_returns_parsed_body(StreamInterface $stream)
     {
-        $data = (object) ['test'];
-        $this->beConstructedWith($data);
-        $this->get(['text/plain'])->shouldReturn($data);
+        $this->parse(['text/plain'], $stream)->shouldReturn(['test']);
     }
 
     function it_throws_exception_on_invalid_values()

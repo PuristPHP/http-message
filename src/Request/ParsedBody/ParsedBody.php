@@ -3,11 +3,12 @@ declare(strict_types=1);
 
 namespace Purist\Http\Request\ParsedBody;
 
+use Psr\Http\Message\StreamInterface;
+
 interface ParsedBody
 {
     /**
-     * @param string[] $contentTypes
-     * @return array|\stdClass|null
+     * @return array|object|null
      */
-    public function get(array $contentTypes);
+    public function parse(array $contentTypes, StreamInterface $stream);
 }

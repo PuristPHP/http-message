@@ -4,8 +4,7 @@ declare(strict_types=1);
 namespace Purist\Http\Request\ParsedBody;
 
 use InvalidArgumentException;
-use Purist\Http\Request\ParsedBody\ParsedBody;
-use stdClass;
+use Psr\Http\Message\StreamInterface;
 
 final class RawParsedBody implements ParsedBody
 {
@@ -28,13 +27,13 @@ final class RawParsedBody implements ParsedBody
     /**
      * @inheritdoc
      */
-    public function get(array $contentTypes)
+    public function parse(array $contentTypes, StreamInterface $stream)
     {
         return $this->parsedBody;
     }
 
     private function isValid($parsedBody): bool
     {
-        return is_array($parsedBody) || $parsedBody instanceof stdClass || $parsedBody === null;
+        return is_array($parsedBody) || is_object($parsedBody) || $parsedBody === null;
     }
 }

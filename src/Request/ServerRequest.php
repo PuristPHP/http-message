@@ -582,7 +582,10 @@ final class ServerRequest implements ServerRequestInterface
      */
     public function getParsedBody()
     {
-        return $this->parsedBody->get($this->getHeader('content-type'));
+        return $this->parsedBody->parse(
+            $this->getHeader('content-type'),
+            $this->request->getBody()
+        );
     }
 
     /**
