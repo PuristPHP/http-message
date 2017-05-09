@@ -17,7 +17,7 @@ final class GlobalServerRequest
     {
         return new ServerRequest(
             new Request(
-                static::createUriFromGlobals(),
+                self::createUriFromGlobals(),
                 new Message(
                     new LazyStream('php://input', 'r'),
                     new HttpHeaders(
