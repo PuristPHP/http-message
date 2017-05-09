@@ -106,7 +106,7 @@ final class TextResponse implements ResponseInterface
      */
     public function withBody(StreamInterface $body)
     {
-        return $this->response->getBody($body);
+        return $this->response->withBody($body);
     }
 
     /**
@@ -122,7 +122,7 @@ final class TextResponse implements ResponseInterface
      */
     public function withStatus($code, $reasonPhrase = '')
     {
-        return $this->response->getStatusCode($code, $reasonPhrase);
+        return $this->response->withStatus($code, $reasonPhrase);
     }
 
     /**
