@@ -10,9 +10,10 @@ use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UploadedFileInterface;
 use Psr\Http\Message\UriInterface;
 use Purist\Http\Request\ParsedBody\RawParsedBody;
+use Purist\Http\Request\RequestTarget;
 use Purist\Http\Request\ServerRequest;
 use Purist\Http\Request\UploadedFile\UploadedFiles;
-use Purist\Http\Stream\LazyReadOnlyTextStream;
+use Purist\Http\Request\Uri;
 
 class ServerRequestSpec extends ObjectBehavior
 {
@@ -21,7 +22,7 @@ class ServerRequestSpec extends ObjectBehavior
         $this->beConstructedWith($request, [], [], $uploadedFiles);
     }
 
-    function it_is_initializable(RequestInterface $request)
+    function it_is_initializable()
     {
         $this->shouldHaveType(ServerRequest::class);
         $this->shouldImplement(ServerRequestInterface::class);
@@ -141,4 +142,59 @@ class ServerRequestSpec extends ObjectBehavior
             ->shouldThrow(\InvalidArgumentException::class)
             ->duringWithParsedBody(true);
     }
+
+    function it_returns_header_line_ny_name(RequestInterface $request)
+    {
+        $request->getHeaderLine('content-type')->willReturn('text/html,text/xml');
+        $this->getHeaderLine('content-type')->shouldReturn('text/html,text/xml');
+    }
+
+    function it_returns_header_by_name(RequestInterface $request)
+    {
+        $request->getHeader('content-type')->willReturn(['text/html', 'text/xml']);
+        $this->getHeader('content-type')->shouldReturn(['text/html', 'text/xml']);
+    }
+
+    function it_returns_request_method(RequestInterface $request)
+    {
+        $request->getMethod()->willReturn(['POST']);
+        $this->getMethod()->shouldReturn(['POST']);
+    }
+
+    function it_returns_uri(RequestInterface $request)
+    {
+        $request->getUri()->willReturn($uri = new Uri());
+        $this->getUri()->shouldReturn($uri);
+    }
+
+    function it_returns_protocol_version(RequestInterface $request)
+    {
+        $request->getProtocolVersion()->willReturn('1.0');
+        $this->getProtocolVersion()->shouldReturn('1.0');
+    }
+
+    function it_returns_request_headers(RequestInterface $request)
+    {
+        $request->getHeaders()->willReturn(['content-type' => ['text/html']]);
+        $this->getHeaders()->shouldReturn(['content-type' => ['text/html']]);
+    }
+
+    function it_checks_if_header_exists_by_name(RequestInterface $request)
+    {
+        $request->hasHeader('content-type')->willReturn(true);
+        $this->hasHeader('content-type')->shouldReturn(true);
+    }
+
+    function it_returns_request_body(RequestInterface $request, StreamInterface $stream)
+    {
+        $request->getBody()->willReturn($stream);
+        $this->getBody()->shouldReturn($stream);
+    }
+
+    function it_returns_request_target(RequestInterface $request)
+    {
+        $request->getRequestTarget()->willReturn($requestTarget = new RequestTarget(new Uri()));
+        $this->getRequestTarget()->shouldReturn($requestTarget);
+    }
+
 }

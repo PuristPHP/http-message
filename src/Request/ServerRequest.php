@@ -158,7 +158,7 @@ final class ServerRequest implements ServerRequestInterface
      */
     public function getHeaderLine($name)
     {
-        return $this->request->getHeader($name);
+        return $this->request->getHeaderLine($name);
     }
 
     /**
