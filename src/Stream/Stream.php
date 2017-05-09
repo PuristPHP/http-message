@@ -173,10 +173,7 @@ final class Stream implements StreamInterface
      */
     public function isWritable()
     {
-        return is_resource($this->resource) && preg_match(
-            '(r\+|w|a|x|c)',
-            stream_get_meta_data($this->resource)['mode']
-        ) === 1;
+        return $this->streamModeMatches('(r\+|w|a|x|c)');
     }
 
     /**
@@ -213,10 +210,7 @@ final class Stream implements StreamInterface
      */
     public function isReadable()
     {
-        return is_resource($this->resource) && preg_match(
-            '(r\+?|(w|c|a)\+)',
-            stream_get_meta_data($this->resource)['mode']
-        ) === 1;
+        return $this->streamModeMatches('(r\+?|(w|c|a)\+)');
     }
 
     /**
@@ -295,5 +289,14 @@ final class Stream implements StreamInterface
         if (!is_resource($this->resource)) {
             throw new RuntimeException('Resource is detached from stream.');
         }
+    }
+
+    private function streamModeMatches(string $pattern): bool
+    {
+        return is_resource($this->resource)
+            && preg_match(
+                $pattern,
+                stream_get_meta_data($this->resource)['mode']
+            ) === 1;
     }
 }
