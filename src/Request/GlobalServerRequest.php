@@ -20,9 +20,7 @@ final class GlobalServerRequest
                 self::createUriFromGlobals(),
                 new Message(
                     new LazyStream('php://input', 'r'),
-                    new HttpHeaders(
-                        function_exists('getallheaders') ? getallheaders() : []
-                    ),
+                    new HttpHeaders(getallheaders()),
                     str_replace('HTTP/', '', $_SERVER['SERVER_PROTOCOL'] ?? '1.1')
                 ),
                 $_SERVER['REQUEST_METHOD'] ?? 'GET'
@@ -40,12 +38,17 @@ final class GlobalServerRequest
 
     private static function createUriFromGlobals(): Uri
     {
-        @list($host, $port) = explode(
-            ':',
-            $_SERVER['HTTP_HOST'] ?? $_SERVER['SERVER_NAME'] ?? $_SERVER['SERVER_ADDR'] ?? ''
+        preg_match(
+            '(^(?<host>[^:]+)(:(?<port>\d+))?$)',
+            $_SERVER['HTTP_HOST'] ?? $_SERVER['SERVER_NAME'] ?? $_SERVER['SERVER_ADDR'],
+            $server
         );
-        @list($path, $query) = explode('?', $_SERVER['REQUEST_URI'] ?? '');
-        @list($query, $fragment) = explode('#', $query ?? '');
+
+        preg_match(
+            '(^(?<path>[^?]+)(\?(?<query>[^#]+))?(#(?<fragment>[^#]+))?$)',
+            $_SERVER['REQUEST_URI'],
+            $resource
+        );
 
         return (new Uri())
             ->withScheme(
@@ -53,10 +56,10 @@ final class GlobalServerRequest
                     ? 'https'
                     : 'http'
             )
-            ->withHost($host)
-            ->withPort($port ?? $_SERVER['SERVER_PORT'] ?? 80)
-            ->withPath($path !== '' ? $path : null)
-            ->withQuery($query !== '' ? $query : $_SERVER['QUERY_STRING'] ?? null)
-            ->withFragment($fragment);
+            ->withHost($server['host'] ?? null)
+            ->withPort($server['port'] ?? $_SERVER['SERVER_PORT'] ?? 80)
+            ->withPath($resource['path'] ?? null)
+            ->withQuery($resource['query'] ?? $_SERVER['QUERY_STRING'] ?? null)
+            ->withFragment($resource['fragment'] ?? null);
     }
 }
