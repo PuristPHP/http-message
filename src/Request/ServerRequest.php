@@ -7,7 +7,6 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UriInterface;
-use Purist\Http\Header\Header;
 use Purist\Http\Request\ParsedBody\ParsedBody;
 use Purist\Http\Request\ParsedBody\RawParsedBody;
 use Purist\Http\Request\UploadedFile\ProcessedUploadedFiles;
