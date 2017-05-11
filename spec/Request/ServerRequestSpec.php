@@ -157,8 +157,8 @@ class ServerRequestSpec extends ObjectBehavior
 
     function it_returns_request_method(RequestInterface $request)
     {
-        $request->getMethod()->willReturn(['POST']);
-        $this->getMethod()->shouldReturn(['POST']);
+        $request->getMethod()->willReturn('POST');
+        $this->getMethod()->shouldReturn('POST');
     }
 
     function it_returns_uri(RequestInterface $request)
@@ -193,8 +193,8 @@ class ServerRequestSpec extends ObjectBehavior
 
     function it_returns_request_target(RequestInterface $request)
     {
-        $request->getRequestTarget()->willReturn($requestTarget = new RequestTarget(new Uri()));
-        $this->getRequestTarget()->shouldReturn($requestTarget);
+        $request->getRequestTarget()->willReturn(new RequestTarget(new Uri()));
+        $this->getRequestTarget()->shouldReturn('/');
     }
 
 }

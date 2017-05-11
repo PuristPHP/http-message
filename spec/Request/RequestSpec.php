@@ -84,12 +84,12 @@ class RequestSpec extends ObjectBehavior
 
     function it_returns_instance_with_replaced_header(MessageInterface $httpMessage)
     {
-        $httpMessage->getHeader('Content-Type')->willReturn('text/html');
+        $httpMessage->getHeader('Content-Type')->willReturn(['text/html']);
         $httpMessage->withHeader('Content-Type', 'text/html')->willReturn($httpMessage);
         $this
             ->withHeader('Content-Type', 'text/html')
             ->callOnWrappedObject('getHeader', ['Content-Type'])
-            ->shouldReturn('text/html');
+            ->shouldReturn(['text/html']);
     }
 
     function it_returns_instance_with_appended_header_value(MessageInterface $httpMessage)

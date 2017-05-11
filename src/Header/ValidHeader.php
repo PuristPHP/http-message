@@ -21,7 +21,6 @@ final class ValidHeader
     }
 
     /**
-     * @return string
      * @throws InvalidArgumentException
      */
     public function name(): string

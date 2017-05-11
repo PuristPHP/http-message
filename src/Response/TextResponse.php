@@ -24,7 +24,7 @@ final class TextResponse implements ResponseInterface
     /**
      * @inheritdoc
      */
-    public function getProtocolVersion()
+    public function getProtocolVersion(): string
     {
         return $this->response->getProtocolVersion();
     }
@@ -32,15 +32,17 @@ final class TextResponse implements ResponseInterface
     /**
      * @inheritdoc
      */
-    public function withProtocolVersion($version)
+    public function withProtocolVersion($version): self
     {
-        return $this->response->withProtocolVersion($version);
+        $response = clone $this;
+        $response->response = $this->response->withProtocolVersion($version);
+        return $response;
     }
 
     /**
      * @inheritdoc
      */
-    public function getHeaders()
+    public function getHeaders(): array
     {
         return $this->response->getHeaders();
     }
@@ -48,7 +50,7 @@ final class TextResponse implements ResponseInterface
     /**
      * @inheritdoc
      */
-    public function hasHeader($name)
+    public function hasHeader($name): bool
     {
         return $this->response->hasHeader($name);
     }
@@ -56,7 +58,7 @@ final class TextResponse implements ResponseInterface
     /**
      * @inheritdoc
      */
-    public function getHeader($name)
+    public function getHeader($name): array
     {
         return $this->response->getHeader($name);
     }
@@ -64,7 +66,7 @@ final class TextResponse implements ResponseInterface
     /**
      * @inheritdoc
      */
-    public function getHeaderLine($name)
+    public function getHeaderLine($name): string
     {
         return $this->response->getHeaderLine($name);
     }
@@ -72,31 +74,37 @@ final class TextResponse implements ResponseInterface
     /**
      * @inheritdoc
      */
-    public function withHeader($name, $value)
+    public function withHeader($name, $value): self
     {
-        return $this->response->withHeader($name, $value);
+        $response = clone $this;
+        $response->response = $this->response->withHeader($name, $value);
+        return $response;
     }
 
     /**
      * @inheritdoc
      */
-    public function withAddedHeader($name, $value)
+    public function withAddedHeader($name, $value): self
     {
-        return $this->response->withAddedHeader($name, $value);
+        $response = clone $this;
+        $response->response = $this->response->withAddedHeader($name, $value);
+        return $response;
     }
 
     /**
      * @inheritdoc
      */
-    public function withoutHeader($name)
+    public function withoutHeader($name): self
     {
-        return $this->response->withoutHeader($name);
+        $response = clone $this;
+        $response->response = $this->response->withoutHeader($name);
+        return $response;
     }
 
     /**
      * @inheritdoc
      */
-    public function getBody()
+    public function getBody(): StreamInterface
     {
         return $this->response->getBody();
     }
@@ -106,13 +114,15 @@ final class TextResponse implements ResponseInterface
      */
     public function withBody(StreamInterface $body)
     {
-        return $this->response->withBody($body);
+        $response = clone $this;
+        $response->response = $this->response->withBody($body);
+        return $response;
     }
 
     /**
      * @inheritdoc
      */
-    public function getStatusCode()
+    public function getStatusCode(): int
     {
         return $this->response->getStatusCode();
     }
@@ -122,13 +132,15 @@ final class TextResponse implements ResponseInterface
      */
     public function withStatus($code, $reasonPhrase = '')
     {
-        return $this->response->withStatus($code, $reasonPhrase);
+        $response = clone $this;
+        $response->response = $this->response->withStatus($code, $reasonPhrase);
+        return $response;
     }
 
     /**
      * @inheritdoc
      */
-    public function getReasonPhrase()
+    public function getReasonPhrase(): string
     {
         return $this->response->getReasonPhrase();
     }

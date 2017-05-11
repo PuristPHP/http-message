@@ -39,8 +39,8 @@ class ResponseSpec extends ObjectBehavior
 
     function it_gets_the_protocol_version($message)
     {
-        $this->getProtocolVersion();
-        $message->getProtocolVersion()->shouldHaveBeenCalled();
+        $message->getProtocolVersion()->willReturn('1.1');
+        $this->getProtocolVersion()->shouldReturn('1.1');
     }
 
     function it_returns_a_new_instance_with_updated_protocol_version($message)

@@ -17,7 +17,7 @@ final class LazyReadOnlyTextStream implements StreamInterface
     /**
      * @inheritdoc
      */
-    public function __toString()
+    public function __toString(): string
     {
         return (string) $this->stream;
     }
@@ -25,7 +25,7 @@ final class LazyReadOnlyTextStream implements StreamInterface
     /**
      * @inheritdoc
      */
-    public function close()
+    public function close(): void
     {
         $this->stream->close();
     }
@@ -41,7 +41,7 @@ final class LazyReadOnlyTextStream implements StreamInterface
     /**
      * @inheritdoc
      */
-    public function getSize()
+    public function getSize(): int
     {
         return $this->stream->getSize();
     }
@@ -49,7 +49,7 @@ final class LazyReadOnlyTextStream implements StreamInterface
     /**
      * @inheritdoc
      */
-    public function tell()
+    public function tell(): int
     {
         return $this->stream->tell();
     }
@@ -57,7 +57,7 @@ final class LazyReadOnlyTextStream implements StreamInterface
     /**
      * @inheritdoc
      */
-    public function eof()
+    public function eof(): bool
     {
         return $this->stream->eof();
     }
@@ -65,7 +65,7 @@ final class LazyReadOnlyTextStream implements StreamInterface
     /**
      * @inheritdoc
      */
-    public function isSeekable()
+    public function isSeekable(): bool
     {
         return $this->stream->isSeekable();
     }
@@ -73,23 +73,23 @@ final class LazyReadOnlyTextStream implements StreamInterface
     /**
      * @inheritdoc
      */
-    public function seek($offset, $whence = SEEK_SET)
+    public function seek($offset, $whence = SEEK_SET): void
     {
-        return $this->stream->seek($offset, $whence);
+        $this->stream->seek($offset, $whence);
     }
 
     /**
      * @inheritdoc
      */
-    public function rewind()
+    public function rewind(): void
     {
-        return $this->stream->rewind();
+        $this->stream->rewind();
     }
 
     /**
      * @inheritdoc
      */
-    public function isWritable()
+    public function isWritable(): bool
     {
         return false;
     }
@@ -97,7 +97,7 @@ final class LazyReadOnlyTextStream implements StreamInterface
     /**
      * @inheritdoc
      */
-    public function write($string)
+    public function write($string): int
     {
         return $this->stream->write($string);
     }
@@ -105,7 +105,7 @@ final class LazyReadOnlyTextStream implements StreamInterface
     /**
      * @inheritdoc
      */
-    public function isReadable()
+    public function isReadable(): bool
     {
         return $this->stream->isReadable();
     }
@@ -113,7 +113,7 @@ final class LazyReadOnlyTextStream implements StreamInterface
     /**
      * @inheritdoc
      */
-    public function read($length)
+    public function read($length): string
     {
         return $this->stream->read($length);
     }
@@ -121,7 +121,7 @@ final class LazyReadOnlyTextStream implements StreamInterface
     /**
      * @inheritdoc
      */
-    public function getContents()
+    public function getContents(): string
     {
         return $this->stream->getContents();
     }

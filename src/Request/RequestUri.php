@@ -14,12 +14,12 @@ final class RequestUri
         $this->request = $request;
     }
 
-    public function toString()
+    public function toString(): string
     {
         return $this->request->getUri()->getPath();
     }
 
-    public function match($uri)
+    public function match($uri): bool
     {
         return $this->toString() === $uri;
     }

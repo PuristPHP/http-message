@@ -25,7 +25,10 @@ final class ProcessedUploadedFiles implements UploadedFiles
         return $this->uploadedFiles;
     }
 
-    private function assertUploadedFile($leaf)
+    /**
+     * @throws InvalidArgumentException
+     */
+    private function assertUploadedFile($leaf): void
     {
         if (!$leaf instanceof UploadedFileInterface) {
             throw new InvalidArgumentException(

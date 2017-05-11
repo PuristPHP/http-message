@@ -19,7 +19,7 @@ final class LazyStream implements StreamInterface
     /**
      * @inheritdoc
      */
-    public function __toString()
+    public function __toString(): string
     {
         return (string) $this->memoizedStream->get();
     }
@@ -27,7 +27,7 @@ final class LazyStream implements StreamInterface
     /**
      * @inheritdoc
      */
-    public function close()
+    public function close(): void
     {
         $this->memoizedStream->get()->close();
     }
@@ -43,7 +43,7 @@ final class LazyStream implements StreamInterface
     /**
      * @inheritdoc
      */
-    public function getSize()
+    public function getSize(): int
     {
         return $this->memoizedStream->get()->getSize();
     }
@@ -51,7 +51,7 @@ final class LazyStream implements StreamInterface
     /**
      * @inheritdoc
      */
-    public function tell()
+    public function tell(): int
     {
         return $this->memoizedStream->get()->tell();
     }
@@ -59,7 +59,7 @@ final class LazyStream implements StreamInterface
     /**
      * @inheritdoc
      */
-    public function eof()
+    public function eof(): bool
     {
         return $this->memoizedStream->get()->eof();
     }
@@ -67,7 +67,7 @@ final class LazyStream implements StreamInterface
     /**
      * @inheritdoc
      */
-    public function isSeekable()
+    public function isSeekable(): bool
     {
         return $this->memoizedStream->get()->isSeekable();
     }
@@ -75,23 +75,23 @@ final class LazyStream implements StreamInterface
     /**
      * @inheritdoc
      */
-    public function seek($offset, $whence = SEEK_SET)
+    public function seek($offset, $whence = SEEK_SET): void
     {
-        return $this->memoizedStream->get()->seek($offset, $whence);
+        $this->memoizedStream->get()->seek($offset, $whence);
     }
 
     /**
      * @inheritdoc
      */
-    public function rewind()
+    public function rewind(): void
     {
-        return $this->memoizedStream->get()->rewind();
+        $this->memoizedStream->get()->rewind();
     }
 
     /**
      * @inheritdoc
      */
-    public function isWritable()
+    public function isWritable(): bool
     {
         return $this->memoizedStream->get()->isWritable();
     }
@@ -99,7 +99,7 @@ final class LazyStream implements StreamInterface
     /**
      * @inheritdoc
      */
-    public function write($string)
+    public function write($string): int
     {
         return $this->memoizedStream->get()->write($string);
     }
@@ -107,7 +107,7 @@ final class LazyStream implements StreamInterface
     /**
      * @inheritdoc
      */
-    public function isReadable()
+    public function isReadable(): bool
     {
         return $this->memoizedStream->get()->isReadable();
     }
@@ -115,7 +115,7 @@ final class LazyStream implements StreamInterface
     /**
      * @inheritdoc
      */
-    public function read($length)
+    public function read($length): string
     {
         return $this->memoizedStream->get()->read($length);
     }
@@ -123,7 +123,7 @@ final class LazyStream implements StreamInterface
     /**
      * @inheritdoc
      */
-    public function getContents()
+    public function getContents(): string
     {
         return $this->memoizedStream->get()->getContents();
     }
