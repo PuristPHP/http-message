@@ -27,7 +27,7 @@ trait StreamTestTrait
         $this->constructDefaultStream();
 
         $this->close();
-        @$this->__toString()->shouldReturn('');
+        $this->__toString()->shouldReturn('');
     }
 
     function it_can_detach_resource_from_stream()
@@ -200,5 +200,19 @@ trait StreamTestTrait
         $this->constructWriteOnlyStream();
 
         $this->shouldThrow(RuntimeException::class)->duringRead(1);
+    }
+
+    function it_closes_detached_stream_without_error()
+    {
+        $this->constructDefaultStream();
+        $this->detach();
+        $this->close();
+    }
+
+    function it_casts_detached_stream_to_string_without_error()
+    {
+        $this->constructDefaultStream();
+        $this->detach();
+        $this->__toString();
     }
 }

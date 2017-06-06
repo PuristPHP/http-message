@@ -33,8 +33,15 @@ final class Stream implements StreamInterface
      */
     public function __toString(): string
     {
-        rewind($this->resource);
-        return (string) stream_get_contents($this->resource);
+        if (!$this->isReadable()) {
+            return '';
+        }
+
+        if ($this->isSeekable()) {
+            rewind($this->resource);
+        }
+
+        return stream_get_contents($this->resource) ?: '';
     }
 
     /**
@@ -42,7 +49,9 @@ final class Stream implements StreamInterface
      */
     public function close(): void
     {
-        fclose($this->resource);
+        if (is_resource($this->resource)) {
+            fclose($this->resource);
+        }
     }
 
     /**
@@ -58,7 +67,7 @@ final class Stream implements StreamInterface
     /**
      * @inheritdoc
      */
-    public function getSize(): int
+    public function getSize(): ?int
     {
         if (!is_resource($this->resource)) {
             return null;
@@ -72,9 +81,7 @@ final class Stream implements StreamInterface
      */
     public function tell(): int
     {
-        $this->assertResource();
-
-        if (false === $position = ftell($this->resource)) {
+        if (false === $position = ftell($this->assertResource($this->resource))) {
             throw new RuntimeException('Could not get position of stream');
         }
 
@@ -86,7 +93,7 @@ final class Stream implements StreamInterface
      */
     public function eof(): bool
     {
-        return $this->resource === null || feof($this->resource);
+        return !is_resource($this->resource) || feof($this->resource);
     }
 
     /**
@@ -104,9 +111,7 @@ final class Stream implements StreamInterface
      */
     public function seek($offset, $whence = SEEK_SET): void
     {
-        $this->assertResource();
-
-        if (fseek($this->resource, $offset, $whence) === -1) {
+        if (fseek($this->assertResource($this->resource), $offset, $whence) === -1) {
             throw new RuntimeException('Failed to seek stream.');
         }
     }
@@ -116,8 +121,6 @@ final class Stream implements StreamInterface
      */
     public function rewind(): void
     {
-        $this->assertResource();
-
         if (!$this->isSeekable()) {
             throw new RuntimeException('Could not rewind not seekable stream.');
         }
@@ -138,8 +141,6 @@ final class Stream implements StreamInterface
      */
     public function write($string): int
     {
-        $this->assertResource();
-
         if (!$this->isWritable()) {
             throw new RuntimeException(
                 sprintf(
@@ -169,8 +170,6 @@ final class Stream implements StreamInterface
      */
     public function read($length): string
     {
-        $this->assertResource();
-
         if (!$this->isReadable()) {
             throw new RuntimeException(
                 sprintf(
@@ -188,9 +187,7 @@ final class Stream implements StreamInterface
      */
     public function getContents(): string
     {
-        $this->assertResource();
-
-        if (false === $contents = stream_get_contents($this->resource)) {
+        if (false === $contents = stream_get_contents($this->assertResource($this->resource))) {
             throw new RuntimeException(
                 sprintf(
                     'Could not get contents from stream with mode %s',
@@ -213,13 +210,17 @@ final class Stream implements StreamInterface
     }
 
     /**
+     * @param resource $resource
+     * @return resource
      * @throws RuntimeException
      */
-    private function assertResource(): void
+    private function assertResource($resource)
     {
-        if (!is_resource($this->resource)) {
+        if (!is_resource($resource)) {
             throw new RuntimeException('Resource is detached from stream.');
         }
+
+        return $resource;
     }
 
     private function streamModeMatches(string $pattern): bool
