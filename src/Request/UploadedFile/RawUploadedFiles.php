@@ -38,10 +38,7 @@ final class RawUploadedFiles implements UploadedFiles
         if ($this->isArrayOfFiles($uploadedFiles)) {
             return array_map(
                 [$this, __METHOD__],
-                $this->normalizeMultipleUploadedFiles(
-                    $uploadedFiles,
-                    $this->arrayKeys($uploadedFiles)
-                )
+                $this->normalizeMultipleUploadedFiles($uploadedFiles)
             );
         }
 
@@ -54,7 +51,7 @@ final class RawUploadedFiles implements UploadedFiles
         );
     }
 
-    private function normalizeMultipleUploadedFiles(array $uploadedFiles, array $keys): array
+    private function normalizeMultipleUploadedFiles(array $uploadedFiles): array
     {
         return array_map(
             function (int $key) use ($uploadedFiles) {
@@ -66,7 +63,7 @@ final class RawUploadedFiles implements UploadedFiles
                     'error' => $uploadedFiles['error'][$key],
                 ];
             },
-            $keys
+            $this->fileIndexes($uploadedFiles)
         );
     }
 
@@ -75,7 +72,7 @@ final class RawUploadedFiles implements UploadedFiles
         return is_array($uploadedFiles['tmp_name']);
     }
 
-    private function arrayKeys(array $uploadedFiles): array
+    private function fileIndexes(array $uploadedFiles): array
     {
         return array_keys($uploadedFiles['tmp_name']);
     }
