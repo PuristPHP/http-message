@@ -7,7 +7,7 @@ use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
 
-final class Response implements ResponseInterface
+class Response implements ResponseInterface
 {
     private $statusCode;
     private $reasonPhrase;
@@ -26,7 +26,7 @@ final class Response implements ResponseInterface
     /**
      * @inheritdoc
      */
-    public function getProtocolVersion(): string
+    final public function getProtocolVersion(): string
     {
         return $this->message->getProtocolVersion();
     }
@@ -34,7 +34,7 @@ final class Response implements ResponseInterface
     /**
      * @inheritdoc
      */
-    public function withProtocolVersion($version): self
+    final public function withProtocolVersion($version): self
     {
         return new self(
             $this->message->withProtocolVersion($version),
@@ -46,7 +46,7 @@ final class Response implements ResponseInterface
     /**
      * @inheritdoc
      */
-    public function getHeaders(): array
+    final public function getHeaders(): array
     {
         return $this->message->getHeaders();
     }
@@ -54,7 +54,7 @@ final class Response implements ResponseInterface
     /**
      * @inheritdoc
      */
-    public function hasHeader($name): bool
+    final public function hasHeader($name): bool
     {
         return $this->message->hasHeader($name);
     }
@@ -62,7 +62,7 @@ final class Response implements ResponseInterface
     /**
      * @inheritdoc
      */
-    public function getHeader($name): array
+    final public function getHeader($name): array
     {
         return $this->message->getHeader($name);
     }
@@ -70,7 +70,7 @@ final class Response implements ResponseInterface
     /**
      * @inheritdoc
      */
-    public function getHeaderLine($name): string
+    final public function getHeaderLine($name): string
     {
         return $this->message->getHeaderLine($name);
     }
@@ -78,7 +78,7 @@ final class Response implements ResponseInterface
     /**
      * @inheritdoc
      */
-    public function withHeader($name, $value): self
+    final public function withHeader($name, $value): self
     {
         return new self(
             $this->message->withHeader($name, $value),
@@ -90,7 +90,7 @@ final class Response implements ResponseInterface
     /**
      * @inheritdoc
      */
-    public function withAddedHeader($name, $value): self
+    final public function withAddedHeader($name, $value): self
     {
         return new self(
             $this->message->withAddedHeader($name, $value),
@@ -102,7 +102,7 @@ final class Response implements ResponseInterface
     /**
      * @inheritdoc
      */
-    public function withoutHeader($name): self
+    final public function withoutHeader($name): self
     {
         return new self(
             $this->message->withoutHeader($name),
@@ -114,7 +114,7 @@ final class Response implements ResponseInterface
     /**
      * @inheritdoc
      */
-    public function getBody(): StreamInterface
+    final public function getBody(): StreamInterface
     {
         return $this->message->getBody();
     }
@@ -122,7 +122,7 @@ final class Response implements ResponseInterface
     /**
      * @inheritdoc
      */
-    public function withBody(StreamInterface $body): self
+    final public function withBody(StreamInterface $body): self
     {
         return $this->message->withBody($body);
     }
@@ -130,7 +130,7 @@ final class Response implements ResponseInterface
     /**
      * @inheritdoc
      */
-    public function getStatusCode(): int
+    final public function getStatusCode(): int
     {
         return $this->statusCode;
     }
@@ -138,7 +138,7 @@ final class Response implements ResponseInterface
     /**
      * @inheritdoc
      */
-    public function withStatus($code, $reasonPhrase = ''): self
+    final public function withStatus($code, $reasonPhrase = ''): self
     {
         return new self(
             $this->message,
@@ -150,7 +150,7 @@ final class Response implements ResponseInterface
     /**
      * @inheritdoc
      */
-    public function getReasonPhrase(): string
+    final public function getReasonPhrase(): string
     {
         return $this->reasonPhrase;
     }
